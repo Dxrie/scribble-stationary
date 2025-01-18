@@ -92,13 +92,22 @@ export const sendEmail = async (
     };
 
     await transporter.sendMail(mailOptions);
-  } catch (err: any) {
-    console.log(err);
-    return NextResponse.json(
-      {
-        message: "Something went wrong: " + err.message,
-      },
-      {status: 500}
-    );
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.log(err);
+      return NextResponse.json(
+        {
+          message: "Something went wrong: " + err.message,
+        },
+        {status: 500}
+      );
+    } else {
+      return NextResponse.json(
+        {
+          message: "An error occured.",
+        },
+        {status: 500}
+      )
+    }
   }
 };

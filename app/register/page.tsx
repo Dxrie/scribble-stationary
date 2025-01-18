@@ -1,10 +1,8 @@
 "use client";
 import {createHash} from "crypto";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 import Link from "next/link";
 import React, {useCallback, useEffect, useState} from "react";
-import {decrypt, encrypt} from "../lib/libs";
+import {decrypt, showSwal} from "../lib/libs";
 import {getCookie, setCookie} from "cookies-next/client";
 import {useRouter} from "next/navigation";
 
@@ -23,23 +21,19 @@ export default function Register() {
             console.log("test");
             router.push("/");
           }
-        } catch (err: any) {
-          console.log(err.message);
-          setCookie("session", "", {expires: new Date(0)});
+        } catch (err: unknown) {
+          if (err instanceof Error) {
+            console.log(err.message);
+            setCookie("session", "", {expires: new Date(0)});
+          } else {
+            console.log("An error occured.");
+          }
         }
       }
     };
 
     decryptFunc();
-  }, []);
-
-  const showSwal = (message: string, success: boolean) => {
-    withReactContent(Swal).fire({
-      title: success ? "Success" : "Error",
-      text: message,
-      icon: success ? "success" : "error",
-    });
-  };
+  }, [router]);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -80,41 +74,40 @@ export default function Register() {
             });
 
             if (response.ok) {
-              const data = await response.json();
-
-              const expires = new Date(Date.now() + 60 * 60 * 1000);
-              const session = await encrypt({data, expires});
-
-              setCookie("session", session, {
-                expires,
-                path: "/",
-                sameSite: "lax",
-              });
-              showSwal("Welcome to Scribble!", true);
-              router.push("/");
+              showSwal(
+                "Info",
+                "Thank you for signing up to Scribble, please verify your email account.",
+                "info"
+              );
+              router.push("/login");
             } else {
               const errorData = await response.json();
-              showSwal(errorData.message, false);
+              showSwal("Error", errorData.message, "error");
             }
-          } catch (err: any) {
-            showSwal(err.message, false);
+          } catch (err: unknown) {
+            if (err instanceof Error) {
+              console.log(err.message);
+              showSwal("Error", err.message, "error");
+            } else {
+              console.log("An error occured.");
+            }
           } finally {
             setIsLoading(false);
           }
         } else {
-          showSwal("Your password doesn't match", false);
+          showSwal("Error", "Your password doesn't match", "error");
         }
       } else {
-        showSwal("Please input a valid credential", false);
+        showSwal("Error", "Please input a valid credential", "error");
       }
     }
-  }, [formData, isLoading]);
+  }, [formData, isLoading, router]);
 
   return (
     <>
       <div className="w-full h-[100vh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
         <span className="flex justify-center items-center gap-3">
-          <img src="favicon.ico" draggable={false} width={50} />
+          <img alt="logo" src="favicon.ico" draggable={false} width={50} />
           <h1 className="text-center text-white text-3xl font-bold">
             Scribble{" "}
           </h1>

@@ -22,7 +22,13 @@ export async function POST(request: Request) {
       {message: "Incorrect username/password"},
       {status: 400}
     );
-  } catch (err: any) {
-    return NextResponse.json({message: err.message}, {status: 500});
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return NextResponse.json({message: err.message}, {status: 500});
+    }
+    return NextResponse.json(
+      {message: "An unexpected error occurred"},
+      {status: 500}
+    );
   }
 }

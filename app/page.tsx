@@ -1,11 +1,9 @@
-import Name from "./components/Name";
-import Navbar from "./components/Navbar";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <>
-      <Navbar />
-      <Name />
+    <Link href={"/register"}>oke</Link>
     </>
   );
 }

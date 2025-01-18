@@ -8,7 +8,14 @@ export async function GET() {
 
     const products = await ProductModel.find();
     return NextResponse.json(products, {status: 200});
-  } catch (err: any) {
-    return NextResponse.json({message: err.message}, {status: 500});
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return NextResponse.json({message: err.message}, {status: 500});
+    }
+
+    return NextResponse.json(
+      {message: "An unexpected error occurred"},
+      {status: 500}
+    );
   }
 }

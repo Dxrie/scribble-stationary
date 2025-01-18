@@ -8,8 +8,15 @@ export async function GET() {
 
     await UserModel.deleteMany();
     return NextResponse.json("ok");
-  } catch (err: any) {
-    return NextResponse.json({message: err.message}, {status: 500});
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return NextResponse.json({message: err.message}, {status: 500});
+    }
+
+    return NextResponse.json(
+      {message: "An unexpected error occurred"},
+      {status: 500}
+    );
   }
 }
 
@@ -28,11 +35,17 @@ export async function DELETE(request: Request) {
       },
       {status: 204}
     );
-  } catch (err: any) {
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return NextResponse.json(
+        {
+          message: err.message,
+        },
+        {status: 500}
+      );
+    }
     return NextResponse.json(
-      {
-        message: err.message,
-      },
+      {message: "An unexpected error occurred"},
       {status: 500}
     );
   }

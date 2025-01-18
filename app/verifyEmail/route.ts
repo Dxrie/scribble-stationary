@@ -35,13 +35,25 @@ export async function GET(request: Request) {
 
       await user.save();
 
-      return NextResponse.json({verified: true}, {status: 200});
+      return new NextResponse(
+        "Account verified. Please login again to use Scribble",
+        {status: 200}
+      );
     }
-  } catch (err: any) {
-    console.log(err);
-    return NextResponse.json(
-      {message: "An error occured: " + err.message},
-      {status: 500}
-    );
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.log(err);
+      return NextResponse.json(
+        {message: "An error occured: " + err.message},
+        {status: 500}
+      );
+    } else {
+      return NextResponse.json(
+        {
+          message: "An error occured.",
+        },
+        {status: 500}
+      );
+    }
   }
 }

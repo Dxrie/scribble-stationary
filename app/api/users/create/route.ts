@@ -3,7 +3,6 @@ import UserModel from "@/app/lib/models/user";
 import connect from "@/app/lib/db";
 import {sendEmail} from "@/app/utils/sendEmail";
 import {getVerificationToken} from "@/app/lib/libs";
-import { models } from "mongoose";
 
 export async function POST(request: Request) {
   try {
@@ -50,7 +49,7 @@ export async function POST(request: Request) {
       isAdmin,
       isVerified,
       verifyToken,
-      verifyTokenExpire
+      verifyTokenExpire,
     });
 
     await user.save(); // Save the user instance with the token and expiration
@@ -60,11 +59,18 @@ export async function POST(request: Request) {
     await sendEmail(user.email, "Email Verification", verificationLink);
 
     return NextResponse.json(user, {status: 201});
-  } catch (err: any) {
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      return NextResponse.json(
+        {
+          message: "Error in creating user: " + err.message,
+        },
+        {status: 500}
+      );
+    }
+
     return NextResponse.json(
-      {
-        message: "Error in creating user: " + err.message,
-      },
+      {message: "An unexpected error occurred"},
       {status: 500}
     );
   }
