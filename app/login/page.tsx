@@ -103,9 +103,15 @@ export default function Login() {
 
   return (
     <>
-      <div className="w-full h-[100vh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
+      <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
         <span className="flex justify-center items-center gap-3">
-          <img alt="logo" src="favicon.ico" draggable={false} height={50} width={50} />
+          <img
+            alt="logo"
+            src="favicon.ico"
+            draggable={false}
+            height={50}
+            width={50}
+          />
           <h1 className="text-center text-white text-3xl font-bold">
             Scribble{" "}
           </h1>
@@ -142,15 +148,24 @@ export default function Login() {
           >
             {isLoading ? "Logging in..." : "Login"}
           </button>
-          <p>
-            Don{"'"}t have an account?{" "}
+
+          <div className="flex flex-col items-center gap-2">
             <Link
-              href={"/register"}
+              href={"/password-reset"}
               className="text-[#2A9D8F] underline underline-offset-2"
             >
-              Register here
+              Forgot your password?
             </Link>
-          </p>
+            <p>
+              Don{"'"}t have an account?{" "}
+              <Link
+                href={"/register"}
+                className="text-[#2A9D8F] underline underline-offset-2"
+              >
+                Register here
+              </Link>
+            </p>
+          </div>
         </form>
       </div>
     </>

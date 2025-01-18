@@ -105,7 +105,7 @@ export default function Register() {
 
   return (
     <>
-      <div className="w-full h-[100vh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
+      <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
         <span className="flex justify-center items-center gap-3">
           <img alt="logo" src="favicon.ico" draggable={false} width={50} />
           <h1 className="text-center text-white text-3xl font-bold">
@@ -127,7 +127,7 @@ export default function Register() {
           <input
             name="email"
             className="w-[90%] py-3 px-3 rounded-xl border-black border drop-shadow-xl focus:outline-none text-black"
-            type="text"
+            type="email"
             placeholder="Email"
             onChange={(e) => setFormData({...formData, email: e.target.value})}
             required
