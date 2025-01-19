@@ -38,6 +38,18 @@ export async function getVerificationToken() {
   return {verificationToken, hashedVerificationToken, verifyTokenExpire};
 }
 
+export async function getChangePasswordToken() {
+  const changePasswordToken = crypto.randomBytes(25).toString("hex");
+  const hashedChangePasswordToken = crypto
+    .createHash("sha256")
+    .update(changePasswordToken)
+    .digest("hex");
+
+  const changePasswordTokenExpire = new Date(Date.now() + 30 * 60 * 1000);
+
+  return {changePasswordToken, hashedChangePasswordToken, changePasswordTokenExpire};
+}
+
 export function showSwal(title: string, text: string, icon: SweetAlertIcon) {
   withReactContent(Swal).fire({
     title,

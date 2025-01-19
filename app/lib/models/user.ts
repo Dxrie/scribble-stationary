@@ -1,15 +1,5 @@
 import {Schema, model, models} from "mongoose";
 
-// export interface IUser extends Document {
-//   email: string;
-//   username: string;
-//   passwordHash: string;
-//   isAdmin: boolean;
-//   isVerified: boolean;
-//   verifyToken: string;
-//   verifyTokenExpire: Date;
-// }
-
 const UserSchema = new Schema(
   {
     email: {
@@ -36,18 +26,25 @@ const UserSchema = new Schema(
     },
     verifyToken: {
       type: String,
-      default: null
+      default: null,
     },
     verifyTokenExpire: {
       type: Date,
-      default: null
+      default: null,
     },
+    changePasswordToken: {
+      type: String,
+      default: null,
+    },
+    changePasswordTokenExpire: {
+      type: Date,
+      default: null,
+    }
   },
   {
     timestamps: true,
   }
 );
-
 
 const UserModel = models.User || model("User", UserSchema);
 

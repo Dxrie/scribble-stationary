@@ -51,6 +51,8 @@ export default function Register() {
       typeof formData.confirmPassword === "string"
     ) {
       if (
+        formData.email.trim() !== "" &&
+        formData.username.trim() !== "" &&
         formData.password.trim() !== "" &&
         formData.confirmPassword.trim() !== ""
       ) {
@@ -112,7 +114,10 @@ export default function Register() {
             Scribble{" "}
           </h1>
         </span>
-        <form className="bg-white mx-auto w-[90%] sm:w-[40%] py-6 pb-10 rounded-3xl shadow-2xl flex flex-col items-center text-black gap-4">
+        <form
+          autoComplete="off"
+          className="bg-white mx-auto w-[90%] sm:w-[40%] py-6 pb-10 rounded-3xl shadow-2xl flex flex-col items-center text-black gap-4"
+        >
           <h1 className="text-2xl font-semibold">Register</h1>
           <input
             name="username"

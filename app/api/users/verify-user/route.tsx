@@ -1,4 +1,6 @@
+import {getChangePasswordToken} from "@/app/lib/libs";
 import UserModel from "@/app/lib/models/user";
+import {sendResetPassEmail} from "@/app/utils/sendEmail";
 import {validate} from "email-validator";
 import {NextResponse} from "next/server";
 
@@ -23,6 +25,21 @@ export async function POST(request: Request) {
         },
         {status: 400}
       );
+
+    const data = await getChangePasswordToken();
+
+    const changePasswordToken = data.changePasswordToken;
+    const hashedChangePasswordToken = data.hashedChangePasswordToken;
+    const changePasswordTokenExpire = data.changePasswordTokenExpire;
+
+    user.changePasswordToken = hashedChangePasswordToken;
+    user.changePasswordTokenExpire = changePasswordTokenExpire;
+
+    await user.save();
+
+    const changePasswordLink = `${process.env.NEXT_PUBLIC_URL}/password-reset?id=${user._id}&token=${changePasswordToken}`;
+
+    await sendResetPassEmail(user.email, "Password Reset", changePasswordLink);
 
     return NextResponse.json({id: user._id}, {status: 200});
   } catch (err: unknown) {

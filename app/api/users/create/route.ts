@@ -52,7 +52,7 @@ export async function POST(request: Request) {
       verifyTokenExpire,
     });
 
-    await user.save(); // Save the user instance with the token and expiration
+    await user.save();
 
     const verificationLink = `${process.env.NEXT_PUBLIC_URL}/verifyEmail?verifyToken=${data.verificationToken}&id=${user._id}`;
 

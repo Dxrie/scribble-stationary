@@ -45,7 +45,7 @@ export default function Login() {
     if (isLoading) return;
 
     if (typeof formData.password === "string") {
-      if (formData.password.trim() !== "") {
+      if (formData.username.trim() !== "" && formData.password.trim() !== "") {
         try {
           setIsLoading(true);
 
@@ -90,13 +90,15 @@ export default function Login() {
         } catch (err: unknown) {
           if (err instanceof Error) {
             console.log(err);
-            showSwal("Error", err.message, "error");
+            showSwal("Error", "An error occured: " + err.message, "error");
           } else {
             console.log("An error occured.");
           }
         } finally {
           setIsLoading(false);
         }
+      } else {
+        showSwal("Error", "Please input a valid credential", "error");
       }
     }
   }, [formData, isLoading, router]);
@@ -117,7 +119,7 @@ export default function Login() {
           </h1>
         </span>
         <form
-          method="post"
+          autoComplete="off"
           className="bg-white mx-auto w-[90%] sm:w-[40%] py-6 pb-10 rounded-xl shadow-2xl flex flex-col items-center text-black gap-4"
         >
           <h1 className="text-2xl font-semibold">Login</h1>
