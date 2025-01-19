@@ -1,3 +1,4 @@
+import connect from "@/app/lib/db";
 import {getChangePasswordToken} from "@/app/lib/libs";
 import UserModel from "@/app/lib/models/user";
 import {sendResetPassEmail} from "@/app/utils/sendEmail";
@@ -15,6 +16,8 @@ export async function POST(request: Request) {
     );
 
   try {
+    await connect();
+
     const user = await UserModel.findOne({email: email});
 
     if (!user)

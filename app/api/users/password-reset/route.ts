@@ -1,3 +1,4 @@
+import connect from "@/app/lib/db";
 import UserModel from "@/app/lib/models/user";
 import {createHash} from "crypto";
 import {NextResponse} from "next/server";
@@ -13,6 +14,8 @@ export async function POST(request: Request) {
     );
 
   try {
+    await connect();
+
     const user = await UserModel.findById(userId);
 
     if (!user)
