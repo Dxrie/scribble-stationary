@@ -1,8 +1,7 @@
 "use client";
 import {getCookie, setCookie} from "cookies-next/client";
-import Link from "next/link";
 import React, {useEffect, useState} from "react";
-import {decrypt, showSwal} from "../lib/libs";
+import {decrypt} from "../lib/libs";
 import NotLoggedInHeader from "./subcomponents/NotLoggedInHeader";
 import LoggedInHeader from "./subcomponents/LoggedInHeader";
 
@@ -19,7 +18,11 @@ const Header = () => {
 
           setIsLoggedIn(true);
         } catch (err: unknown) {
-          setCookie("session", "", {expires: new Date(0)});
+          if (err instanceof Error) {
+            setCookie("session", "", {expires: new Date(0)});
+          } else {
+            setCookie("session", "", {expires: new Date(0)});
+          }
         }
       }
     };
@@ -27,9 +30,7 @@ const Header = () => {
     checkCookie();
   }, []);
 
-  return (
-    isLoggedIn === false ? <LoggedInHeader /> : <NotLoggedInHeader />
-  );
+  return isLoggedIn === false ? <LoggedInHeader /> : <NotLoggedInHeader />;
 };
 
 export default Header;
