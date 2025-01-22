@@ -18,7 +18,6 @@ export default function Login() {
           const payload = await decrypt(cookie);
 
           if (payload) {
-            console.log("test");
             router.push("/");
           }
         } catch (err: unknown) {
