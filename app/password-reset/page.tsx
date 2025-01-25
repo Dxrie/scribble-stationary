@@ -4,6 +4,7 @@ import {Suspense, useCallback, useEffect, useState} from "react";
 import {showSwal} from "../lib/libs";
 import {useRouter, useSearchParams} from "next/navigation";
 import Loading from "../components/Loading";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 
 function PasswordResetContent() {
   const searchParams = useSearchParams();
@@ -162,12 +163,12 @@ function PasswordResetContent() {
         <>
           <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
             <span className="flex justify-center items-center gap-3">
-              <img
+              <LazyLoadImage
                 alt="logo"
                 src="favicon.ico"
                 draggable={false}
-                height={50}
                 width={50}
+                height={50}
               />
               <h1 className="text-center text-white text-3xl font-bold">
                 Scribble{" "}
@@ -208,6 +209,7 @@ function PasswordResetContent() {
                 type="button"
                 onClick={changePassword}
                 className="hover:bg-slate-900 w-[90%] py-3 px-3 rounded-3xl border-black border-1 drop-shadow-xl focus:outline-none text-white bg-black font-semibold cursor-pointer"
+                disabled={isLoading}
               >
                 Change Password
               </button>
@@ -230,12 +232,12 @@ function PasswordResetContent() {
       <>
         <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
           <span className="flex justify-center items-center gap-3">
-            <img
+            <LazyLoadImage
               alt="logo"
               src="favicon.ico"
               draggable={false}
-              height={50}
               width={50}
+              height={50}
             />
             <h1 className="text-center text-white text-3xl font-bold">
               Scribble{" "}
@@ -262,6 +264,7 @@ function PasswordResetContent() {
               type="button"
               onClick={verifyUser}
               className="hover:bg-slate-900 w-[90%] py-3 px-3 rounded-3xl border-black border-1 drop-shadow-xl focus:outline-none text-white bg-black font-semibold cursor-pointer"
+              disabled={isLoading}
             >
               {isLoading ? "Sending Link..." : "Send Link"}
             </button>

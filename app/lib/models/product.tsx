@@ -38,7 +38,7 @@ const ProductSchema = new Schema(
       ],
     },
     image: {
-      type: Buffer,
+      type: String,
       required: true,
     },
     isAvailable: {

@@ -1,6 +1,6 @@
 import {JWTPayload, jwtVerify, SignJWT} from "jose";
 import crypto from "crypto";
-import Swal, { SweetAlertIcon } from "sweetalert2";
+import Swal, {SweetAlertIcon} from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 const secretKey = "scribble";
@@ -47,7 +47,11 @@ export async function getChangePasswordToken() {
 
   const changePasswordTokenExpire = new Date(Date.now() + 30 * 60 * 1000);
 
-  return {changePasswordToken, hashedChangePasswordToken, changePasswordTokenExpire};
+  return {
+    changePasswordToken,
+    hashedChangePasswordToken,
+    changePasswordTokenExpire,
+  };
 }
 
 export function showSwal(title: string, text: string, icon: SweetAlertIcon) {
@@ -57,3 +61,26 @@ export function showSwal(title: string, text: string, icon: SweetAlertIcon) {
     icon,
   });
 }
+
+export function getBase64(file: File): Promise<string | ArrayBuffer | null> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+}
+
+export const x = [
+  "Notebooks & Journals",
+  "Pens & Pencils",
+  "Art Supplies",
+  "Office Supplies",
+  "Paper Products",
+  "Planners & Organizers",
+  "Desk Accessories",
+  "Markers & Highlighters",
+  "Adhesives & Tapes",
+  "Craft Supplies",
+  "Other",
+];

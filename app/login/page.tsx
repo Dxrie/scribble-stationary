@@ -5,6 +5,7 @@ import React, {useCallback, useEffect, useState} from "react";
 import {decrypt, encrypt, showSwal} from "../lib/libs";
 import {getCookie, setCookie} from "cookies-next/client";
 import {useRouter} from "next/navigation";
+import {LazyLoadImage} from "react-lazy-load-image-component";
 
 export default function Login() {
   const router = useRouter();
@@ -106,12 +107,12 @@ export default function Login() {
     <>
       <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
         <span className="flex justify-center items-center gap-3">
-          <img
+          <LazyLoadImage
             alt="logo"
             src="favicon.ico"
             draggable={false}
-            height={50}
             width={50}
+            height={50}
           />
           <h1 className="text-center text-white text-3xl font-bold">
             Scribble{" "}
@@ -146,6 +147,7 @@ export default function Login() {
             onClick={login}
             type="button"
             className="hover:bg-slate-900 w-[90%] py-3 px-3 rounded-3xl border-black border-1 drop-shadow-xl focus:outline-none text-white bg-black font-semibold cursor-pointer"
+            disabled={isLoading}
           >
             {isLoading ? "Logging in..." : "Login"}
           </button>

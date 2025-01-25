@@ -30,7 +30,7 @@ const Header = () => {
     checkCookie();
   }, []);
 
-  return isLoggedIn === false ? <LoggedInHeader /> : <NotLoggedInHeader />;
+  return isLoggedIn ? <LoggedInHeader /> : <NotLoggedInHeader />;
 };
 
 export default Header;

@@ -19,7 +19,7 @@ const connect = async () => {
     try {
         mongoose.connect(MONGO_URI, {
             dbName: "db-scribble",
-            bufferCommands: true
+            bufferCommands: true,
         });
 
         console.log("Connected");

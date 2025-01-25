@@ -39,7 +39,11 @@ const UserSchema = new Schema(
     changePasswordTokenExpire: {
       type: Date,
       default: null,
-    }
+    },
+    cart: {
+      type: Array,
+      default: [],
+    },
   },
   {
     timestamps: true,
