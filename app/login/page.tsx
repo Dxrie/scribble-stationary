@@ -106,7 +106,7 @@ export default function Login() {
     <>
       <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
         <span className="flex justify-center items-center gap-3">
-          <LazyLoadImage
+          <img
             alt="logo"
             src="favicon.ico"
             draggable={false}

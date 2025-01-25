@@ -4,7 +4,6 @@ import {Suspense, useCallback, useEffect, useState} from "react";
 import {showSwal} from "../lib/libs";
 import {useRouter, useSearchParams} from "next/navigation";
 import Loading from "../components/Loading";
-import {LazyLoadImage} from "react-lazy-load-image-component";
 
 function PasswordResetContent() {
   const searchParams = useSearchParams();
@@ -163,7 +162,7 @@ function PasswordResetContent() {
         <>
           <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
             <span className="flex justify-center items-center gap-3">
-              <LazyLoadImage
+              <img
                 alt="logo"
                 src="favicon.ico"
                 draggable={false}
@@ -232,7 +231,7 @@ function PasswordResetContent() {
       <>
         <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
           <span className="flex justify-center items-center gap-3">
-            <LazyLoadImage
+            <img
               alt="logo"
               src="favicon.ico"
               draggable={false}

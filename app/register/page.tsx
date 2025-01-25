@@ -5,7 +5,6 @@ import React, {useCallback, useEffect, useState} from "react";
 import {decrypt, showSwal} from "../lib/libs";
 import {getCookie, setCookie} from "cookies-next/client";
 import {useRouter} from "next/navigation";
-import {LazyLoadImage} from "react-lazy-load-image-component";
 
 export default function Register() {
   const router = useRouter();
@@ -110,7 +109,7 @@ export default function Register() {
     <>
       <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
         <span className="flex justify-center items-center gap-3">
-          <LazyLoadImage
+          <img
             alt="logo"
             src="favicon.ico"
             draggable={false}
