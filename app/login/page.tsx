@@ -5,7 +5,6 @@ import React, {useCallback, useEffect, useState} from "react";
 import {decrypt, encrypt, showSwal} from "../lib/libs";
 import {getCookie, setCookie} from "cookies-next/client";
 import {useRouter} from "next/navigation";
-import {LazyLoadImage} from "react-lazy-load-image-component";
 
 export default function Login() {
   const router = useRouter();
