@@ -5,6 +5,7 @@ import React, {useCallback, useEffect, useState} from "react";
 import {decrypt, showSwal} from "../lib/libs";
 import {getCookie, setCookie} from "cookies-next/client";
 import {useRouter} from "next/navigation";
+import Transition from "../components/Transition";
 
 export default function Register() {
   const router = useRouter();
@@ -106,7 +107,7 @@ export default function Register() {
   }, [formData, isLoading, router]);
 
   return (
-    <>
+    <Transition>
       <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
         <span className="flex justify-center items-center gap-3">
           <img
@@ -182,6 +183,6 @@ export default function Register() {
           </p>
         </form>
       </div>
-    </>
+    </Transition>
   );
 }

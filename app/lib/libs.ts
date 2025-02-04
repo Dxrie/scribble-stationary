@@ -84,3 +84,18 @@ export const x = [
   "Craft Supplies",
   "Other",
 ];
+
+export interface IProduct {
+  _id: string;
+  name: string;
+  description: string;
+  image: string;
+  price: number;
+  stock: number;
+  category: string;
+  isAvailable: boolean;
+}
+
+export const formatToCurrency = (number: number | undefined) => {
+  return number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};

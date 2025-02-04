@@ -1,33 +1,51 @@
 "use client";
-import {showSwal} from "@/app/lib/libs";
+import {formatToCurrency, showSwal} from "@/app/lib/libs";
 import React, {useEffect, useState} from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
+import {Add, Remove} from "@mui/icons-material";
+import {useMediaQuery} from "@mui/material";
+import Link from "next/link";
+import Image from "next/image";
 
-interface Product {
+interface IProduct {
+  _id: string;
   name: string;
   description: string;
-  image: string;
   price: number;
   stock: number;
-  category: string;
-  isAvailable: boolean;
+  category:
+    | "Notebooks & Journals"
+    | "Pens & Pencils"
+    | "Art Supplies"
+    | "Office Supplies"
+    | "Paper Products"
+    | "Planners & Organizers"
+    | "Desk Accessories"
+    | "Markers & Highlighters"
+    | "Adhesives & Tapes"
+    | "Craft Supplies"
+    | "Other";
+  image: string;
+  isAvailable?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const Product = () => {
   const [quantity, setQuantity] = useState(1);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
+
+  const match = useMediaQuery("(min-width:1024px)");
 
   const handleAddToCart = () => {
     if (selectedProduct) {
@@ -95,84 +113,164 @@ const Product = () => {
                 key={index}
                 className="w-[250px] h-[350px] flex-none relative bg-gray-300 rounded-2xl overflow-hidden flex flex-col justify-between"
               >
-                {/* Image Container */}
-                <div className="w-[250px] h-[200px] overflow-hidden bg-gray-200 rounded-lg">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* Product Name and Price */}
-                <div className="px-3 py-2 flex flex-col justify-start flex-grow">
-                  <h1 className="font-semibold text-[15px] text-black">
-                    {product.name}
-                  </h1>
-                  <h1 className="text-[13px] text-black line-clamp-1">
-                    {product.description}
-                  </h1>
-                  <h1 className="text-[12px] text-gray-700">
-                    {"Rp " + product.price}
-                  </h1>
-                </div>
-
-                {/* Buttons */}
-                <div className="absolute bottom-4 left-0 w-full flex items-center justify-between px-4">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button
-                        onClick={() => setSelectedProduct(product)}
-                        className="bg-gray-800 text-white text-sm rounded-lg hover:bg-gray-950"
-                      >
-                        Add to cart
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="border-none">
-                      <DialogHeader>
-                        <DialogTitle>
-                          Add {selectedProduct?.name} to Cart
-                        </DialogTitle>
-                      </DialogHeader>
-                      <div className="flex flex-col gap-4">
-                        <img
-                          src={selectedProduct?.image}
-                          alt={selectedProduct?.name}
+                {/* Link wraps the entire card if match is true */}
+                {match ? (
+                  <Link href={`/product?id=${product._id}`}>
+                    <div>
+                      {/* Image Container */}
+                      <div className="w-[250px] h-[200px] overflow-hidden bg-gray-200 rounded-lg">
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          width={300}
+                          height={300}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
                           draggable={false}
-                          className="w-full object-cover rounded-lg border-2 border-black"
                         />
-                        <DialogDescription>
-                          {selectedProduct?.description}
-                        </DialogDescription>
-                        <div className="flex flex-col gap-5">
-                          <div className="flex items-center gap-2"><label
-                            htmlFor="quantity"
-                            className="text-sm font-medium"
-                          >
-                            Quantity (Price: Rp {selectedProduct?.price}):
-                          </label>
-                          <Input
-                            id="quantity"
-                            type="number"
-                            value={quantity}
-                            onChange={(e) =>
-                              setQuantity(Number(e.target.value))
-                            }
-                            min={1}
-                            max={selectedProduct?.stock}
-                            className="w-20"
-                          /></div>
-                          <label>Stock: {selectedProduct?.stock}</label>
+                      </div>
+
+                      {/* Product Name and Price */}
+                      <div className="px-3 py-2 flex flex-col justify-start flex-grow">
+                        <h1 className="font-semibold text-[15px] text-black">
+                          {product.name}
+                        </h1>
+                        <h1 className="text-[13px] text-black line-clamp-1">
+                          {product.description}
+                        </h1>
+                        <h1 className="text-[12px] text-gray-700">
+                          {"Rp " + product.price}
+                        </h1>
+                      </div>
+
+                      {/* Buttons (inside the Link when match is true) */}
+                      <div className="absolute bottom-4 left-0 w-full flex items-center justify-between px-4">
+                        <Button className="bg-gray-800 text-white text-sm rounded-lg hover:bg-gray-950">
+                          Add to cart
+                        </Button>
+                      </div>
+                    </div>
+                  </Link>
+                ) : (
+                  <>
+                    {/* Link wraps only the clickable part of the card (excluding the button) when match is false */}
+                    <Link href={`/product?id=${product._id}`}>
+                      <div>
+                        {/* Image Container */}
+                        <div className="w-[250px] h-[200px] overflow-hidden bg-gray-200 rounded-lg">
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            height={300}
+                            width={300}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                            draggable={false}
+                          />
+                        </div>
+
+                        {/* Product Name and Price */}
+                        <div className="px-3 py-2 flex flex-col justify-start flex-grow">
+                          <h1 className="font-semibold text-[15px] text-black">
+                            {product.name}
+                          </h1>
+                          <h1 className="text-[13px] text-black line-clamp-1">
+                            {product.description}
+                          </h1>
+                          <h1 className="text-[12px] text-gray-700">
+                            {"Rp " + product.price}
+                          </h1>
                         </div>
                       </div>
-                      <DialogFooter>
+                    </Link>
+
+                    {/* Buttons (outside the Link when match is false) */}
+                    <div className="absolute bottom-4 left-0 w-full flex items-center justify-between px-4">
+                      <Dialog>
                         <DialogTrigger asChild>
-                          <Button onClick={handleAddToCart}>Add to Cart</Button>
+                          <Button
+                            onClick={() => {
+                              setSelectedProduct(product);
+                              setQuantity(1);
+                            }}
+                            className="bg-gray-800 text-white text-sm rounded-lg hover:bg-gray-950"
+                          >
+                            Add to cart
+                          </Button>
                         </DialogTrigger>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-                </div>
+                        <DialogContent className="border-none overflow-scroll max-w-max max-h-screen scroll">
+                          <DialogHeader>
+                            <DialogTitle>
+                              Add {selectedProduct?.name} to Cart
+                            </DialogTitle>
+                          </DialogHeader>
+                          <div className="flex flex-col w-full">
+                            <Image
+                              src={
+                                selectedProduct?.image
+                                  ? selectedProduct?.image
+                                  : ""
+                              }
+                              alt={
+                                selectedProduct?.name
+                                  ? selectedProduct?.name
+                                  : ""
+                              }
+                              width={300}
+                              height={300}
+                              draggable={false}
+                              className="w-full object-cover rounded-lg border-2 border-black"
+                              loading="lazy"
+                            />
+                            <div className="w-full flex justify-between items-center py-3 gap-10">
+                              <div className="flex flex-col">
+                                <p className="text-2xl font-bold">
+                                  Rp{formatToCurrency(selectedProduct?.price)}
+                                </p>
+                                <p className="font-thin">
+                                  {selectedProduct?.name}
+                                </p>
+                              </div>
+
+                              <div className="flex gap-2 items-center mt-4">
+                                <Button
+                                  onClick={() =>
+                                    setQuantity(
+                                      quantity > 1 ? quantity - 1 : quantity
+                                    )
+                                  }
+                                >
+                                  <Remove className="font-bold" />
+                                </Button>
+                                <h1 className="font-bold">{quantity}</h1>
+                                <Button
+                                  onClick={() =>
+                                    setQuantity(
+                                      selectedProduct?.stock
+                                        ? quantity < selectedProduct?.stock
+                                          ? quantity + 1
+                                          : quantity
+                                        : quantity
+                                    )
+                                  }
+                                >
+                                  <Add />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                          <DialogFooter className="sm:justify-start">
+                            <DialogTrigger asChild>
+                              <Button onClick={handleAddToCart}>
+                                Add to Cart
+                              </Button>
+                            </DialogTrigger>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                  </>
+                )}
               </div>
             ))}
       </div>

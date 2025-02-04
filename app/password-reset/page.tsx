@@ -4,6 +4,7 @@ import {Suspense, useCallback, useEffect, useState} from "react";
 import {showSwal} from "../lib/libs";
 import {useRouter, useSearchParams} from "next/navigation";
 import Loading from "../components/Loading";
+import Transition from "../components/Transition";
 
 function PasswordResetContent() {
   const searchParams = useSearchParams();
@@ -159,7 +160,7 @@ function PasswordResetContent() {
 
     if (validToken && isLoading === false) {
       return (
-        <>
+        <Transition>
           <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
             <span className="flex justify-center items-center gap-3">
               <img
@@ -223,12 +224,12 @@ function PasswordResetContent() {
               </div>
             </form>
           </div>
-        </>
+        </Transition>
       );
     }
   } else {
     return (
-      <>
+      <Transition>
         <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
           <span className="flex justify-center items-center gap-3">
             <img
@@ -278,7 +279,7 @@ function PasswordResetContent() {
             </div>
           </form>
         </div>
-      </>
+      </Transition>
     );
   }
 }

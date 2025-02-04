@@ -2,6 +2,7 @@
 
 import {FormEvent, useEffect, useState} from "react";
 import {getBase64} from "../lib/libs";
+import Transition from "../components/Transition";
 
 export default function Page() {
   const categories = [
@@ -64,7 +65,7 @@ export default function Page() {
   };
 
   return (
-    <>
+    <Transition>
       <form
         onSubmit={(e) => handleSubmit(e)}
         encType="multipart/form-data"
@@ -75,11 +76,38 @@ export default function Page() {
           type="file"
           accept="image/png, image/jpg, image/jpeg"
         />
-        <input type="text" placeholder="Product Name" onChange={(e) => setFormData({...formData, productName: e.target.value})} />
-        <input type="text" placeholder="Description" onChange={(e) => setFormData({...formData, description: e.target.value})} />
-        <input type="number" placeholder="Price" onChange={(e) => setFormData({...formData, price: parseInt(e.target.value)})} />
-        <input type="number" placeholder="Stock" onChange={(e) => setFormData({...formData, stock: parseInt(e.target.value)})} />
-        <select name="category" onChange={(e) => setFormData({...formData, category: e.target.value})}>
+        <input
+          type="text"
+          placeholder="Product Name"
+          onChange={(e) =>
+            setFormData({...formData, productName: e.target.value})
+          }
+        />
+        <input
+          type="text"
+          placeholder="Description"
+          onChange={(e) =>
+            setFormData({...formData, description: e.target.value})
+          }
+        />
+        <input
+          type="number"
+          placeholder="Price"
+          onChange={(e) =>
+            setFormData({...formData, price: parseInt(e.target.value)})
+          }
+        />
+        <input
+          type="number"
+          placeholder="Stock"
+          onChange={(e) =>
+            setFormData({...formData, stock: parseInt(e.target.value)})
+          }
+        />
+        <select
+          name="category"
+          onChange={(e) => setFormData({...formData, category: e.target.value})}
+        >
           {categories.map((item, index) => (
             <option key={index} value={item}>
               {item}
@@ -88,6 +116,6 @@ export default function Page() {
         </select>
         <button type="submit">Submit File</button>
       </form>
-    </>
+    </Transition>
   );
 }
