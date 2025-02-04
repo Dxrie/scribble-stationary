@@ -1,12 +1,13 @@
 "use client";
 import {formatToCurrency, IProduct, showSwal} from "@/app/lib/libs";
 import Image from "next/image";
-import {useCallback, useEffect, useState} from "react";
+import {Suspense, useCallback, useEffect, useState} from "react";
 import {Favorite} from "@mui/icons-material";
 import {useSearchParams} from "next/navigation";
 import ProductNavbar from "@/app/components/ProductNavbar";
+import Loading from "@/app/components/Loading";
 
-const ProductDisplay = () => {
+const ProductDisplayContent = () => {
     const searchParams = useSearchParams();
     const productId = searchParams.get("id");
 
@@ -61,4 +62,8 @@ const ProductDisplay = () => {
     );
 };
 
-export default ProductDisplay;
+export default function ProductDisplay() {
+    return <Suspense fallback={<Loading />}>
+        <ProductDisplayContent />
+    </Suspense>
+};
