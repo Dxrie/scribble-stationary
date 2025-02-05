@@ -108,7 +108,7 @@ export default function Register() {
 
   return (
     <Transition>
-      <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
+      <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#2A9D8F]">
         <span className="flex justify-center items-center gap-3">
           <img
             alt="logo"

@@ -105,7 +105,7 @@ export default function Login() {
 
   return (
     <Transition>
-      <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
+      <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#2A9D8F]">
         <span className="flex justify-center items-center gap-3">
           <img
             alt="logo"
@@ -155,11 +155,11 @@ export default function Login() {
           <div className="flex flex-col items-center gap-2">
             <Link
               href={"/password-reset"}
-              className="text-[#2A9D8F] underline underline-offset-2"
+              className="text-[#2A9D8F] underline underline-offset-2 tracking-tight"
             >
               Forgot your password?
             </Link>
-            <p>
+            <p className="tracking-tight">
               Don{"'"}t have an account?{" "}
               <Link
                 href={"/register"}

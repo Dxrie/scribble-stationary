@@ -1,6 +1,7 @@
 import type {Metadata} from "next";
 import {Geist, Geist_Mono, Poppins, Quicksand} from "next/font/google";
 import "./globals.css";
+import ReactQueryProvider from "@/app/utils/ReactQueryProvider";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -46,7 +47,9 @@ export default function RootLayout({
         <body
             className={`${geistSans.variable} ${geistMono.variable} ${quicksand.variable} ${poppins.variable} antialiased`}
         >
-        {children}
+        <ReactQueryProvider>
+            <main>{children}</main>
+        </ReactQueryProvider>
         </body>
         </html>
     );
