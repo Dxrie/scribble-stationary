@@ -34,7 +34,7 @@ const Categories = () => {
                                 className="flex flex-col gap-2 items-center animate-pulse"
                             >
                                 {/* Circle Skeleton */}
-                                <div className="p-8 bg-gray-500 rounded-full"></div>
+                                <div className="p-8 bg-gray-500 rounded-full border-2 border-black"></div>
                                 {/* Text Skeleton */}
                                 <div className="h-3 w-12 bg-gray-500 rounded"></div>
                             </div>
@@ -44,7 +44,7 @@ const Categories = () => {
                             key={index}
                             className="flex flex-col gap-2 items-center cursor-pointer"
                         >
-                            <div className="p-8 bg-gray-500 rounded-full relative overflow-hidden"><Image
+                            <div className="p-8 bg-gray-500 rounded-full relative overflow-hidden border-2 border-black"><Image
                                 src={"/categories/notebook.jpg"}
                                 alt={"s"}
                                 objectFit={"cover"}

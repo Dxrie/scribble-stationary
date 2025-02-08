@@ -10,18 +10,18 @@ export default function NotFoundPage() {
     <Transition>
       <div
         className="flex flex-col items-center justify-center min-h-screen text-center p-4"
-        style={{backgroundColor: "#264653"}}
+        style={{backgroundColor: "#FAF9F6"}}
       >
         {/* Title */}
-        <h1 className="text-6xl font-bold text-white mb-4">404</h1>
+        <h1 className="text-6xl font-bold text-black mb-4">404</h1>
 
         {/* Subtitle */}
-        <h2 className="text-2xl font-semibold text-gray-200 mb-4">
+        <h2 className="text-2xl font-semibold text-gray-950 mb-4">
           Oops! Page Not Found
         </h2>
 
         {/* Description */}
-        <p className="text-gray-300 mb-8 max-w-md">
+        <p className="text-gray-900 mb-8 max-w-md">
           The page you{"'"}re looking for doesn{"'"}t exist or has been moved. Please
           check the URL or go back to the homepage.
         </p>
@@ -30,13 +30,13 @@ export default function NotFoundPage() {
         <div className="flex space-x-4">
           <button
             onClick={() => router.back()}
-            className="bg-gray-200 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-300 transition duration-300"
+            className="bg-gray-950 text-white px-6 py-2 rounded-lg hover:bg-gray-500 transition duration-300"
           >
             Go Back
           </button>
           <Link
             href="/"
-            className="bg-[#2A9D8F] text-white px-6 py-2 rounded-lg hover:bg-[#21867A] transition duration-300"
+            className="bg-[#264653] text-white px-6 py-2 rounded-lg hover:bg-[#355070] transition duration-300"
           >
             Return Home
           </Link>

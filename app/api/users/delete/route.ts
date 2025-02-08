@@ -21,12 +21,12 @@ export async function GET() {
 }
 
 export async function DELETE(request: Request) {
-  await connect();
-
-  const body = await request.json();
-  const {id} = body;
-
   try {
+    await connect();
+
+    const body = await request.json();
+    const {id} = body;
+
     await UserModel.findByIdAndDelete(id);
 
     return NextResponse.json(

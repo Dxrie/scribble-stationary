@@ -6,16 +6,16 @@ import {validate} from "email-validator";
 import {NextResponse} from "next/server";
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  const {email} = body;
-
-  if (!validate(email))
-    return NextResponse.json(
-      {message: "Please use a valid email."},
-      {status: 400}
-    );
-
   try {
+    const body = await request.json();
+    const {email} = body;
+
+    if (!validate(email))
+      return NextResponse.json(
+          {message: "Please use a valid email."},
+          {status: 400}
+      );
+
     await connect();
 
     const user = await UserModel.findOne({email: email});

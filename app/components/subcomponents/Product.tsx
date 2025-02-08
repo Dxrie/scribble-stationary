@@ -150,7 +150,7 @@ const Product = () => {
                                                     <p className="text-2xl font-bold">
                                                         Rp{formatToCurrency(selectedProduct?.price)}
                                                     </p>
-                                                    <p className="font-thin">
+                                                    <p className="font-normal">
                                                         {selectedProduct?.name}
                                                     </p>
                                                 </div>

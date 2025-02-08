@@ -4,16 +4,16 @@ import {createHash} from "crypto";
 import {NextResponse} from "next/server";
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  const {userId, newPassword} = body;
-
-  if (!(userId && newPassword))
-    return NextResponse.json(
-      {message: "Please pass on the required informations."},
-      {status: 400}
-    );
-
   try {
+    const body = await request.json();
+    const {userId, newPassword} = body;
+
+    if (!(userId && newPassword))
+      return NextResponse.json(
+          {message: "Please pass on the required informations."},
+          {status: 400}
+      );
+
     await connect();
 
     const user = await UserModel.findById(userId);

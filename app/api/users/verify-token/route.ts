@@ -4,10 +4,10 @@ import {createHash} from "crypto";
 import {NextResponse} from "next/server";
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  const {id, token} = body;
-
   try {
+    const body = await request.json();
+    const {id, token} = body;
+
     await connect();
 
     const user = await UserModel.findById(id);

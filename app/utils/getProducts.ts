@@ -11,7 +11,7 @@ const getData = async () => {
         throw new Error(`Failed to fetch products: ${errorData.message}`);
     }
 
-    return response.json();
+    return await response.json();
 };
 
 export default function getProducts() {
