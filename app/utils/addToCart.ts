@@ -1,7 +1,7 @@
-async function postData(productId: string | null | undefined, userId: string | null | undefined) {
+async function postData(productId: string | null | undefined, userId: string | null | undefined, total: number | null | undefined) {
     const response = await fetch("/api/carts/add", {
         method: "POST",
-        body: JSON.stringify({itemId: productId, userId}),
+        body: JSON.stringify({itemId: productId, userId, total}),
     });
 
     if (!response.ok) {
@@ -12,6 +12,6 @@ async function postData(productId: string | null | undefined, userId: string | n
     return await response.json();
 }
 
-export default function addToCart(productId: string | null | undefined, userId: string | null | undefined) {
-    return postData(productId, userId);
+export default function addToCart(productId: string | null | undefined, userId: string | null | undefined, total: number | null | undefined) {
+    return postData(productId, userId, total);
 }

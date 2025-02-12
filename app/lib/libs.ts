@@ -10,7 +10,7 @@ export async function encrypt(payload: JWTPayload) {
   return await new SignJWT(payload)
     .setProtectedHeader({alg: "HS256"})
     .setIssuedAt()
-    .setExpirationTime("1h")
+    .setExpirationTime("1d")
     .sign(key);
 }
 
@@ -94,6 +94,11 @@ export interface IProduct {
   stock: number;
   category: string;
   isAvailable: boolean;
+}
+
+export interface ICart {
+  product: IProduct;
+  total: number;
 }
 
 export const formatToCurrency = (number: number | undefined) => {

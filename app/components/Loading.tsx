@@ -4,7 +4,7 @@ const Loading = () => {
   return (
     <div
       role="status"
-      className="w-full h-[100dvh] flex justify-center items-center bg-black"
+      className="w-full h-[100dvh] flex justify-center items-center bg-background absolute top-0 left-0 z-40"
     >
       <svg
         aria-hidden="true"

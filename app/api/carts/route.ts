@@ -9,7 +9,7 @@ export async function POST(request: Request) {
 
         await connect();
 
-        const user = await UserModel.findById(id);
+        const user = await UserModel.findById(id).populate("cart.product");
 
         if (!user) return NextResponse.json({message: "User with that id wasn't found"}, {status: 404});
 

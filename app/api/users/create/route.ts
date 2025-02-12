@@ -58,7 +58,15 @@ export async function POST(request: Request) {
 
     await sendEmail(user.email, "Email Verification", verificationLink);
 
-    return NextResponse.json(user, {status: 201});
+    const userResponse = user.toObject();
+    delete userResponse.passwordHash;
+    delete userResponse.verifyToken;
+    delete userResponse.verifyTokenExpire;
+    delete userResponse.changePasswordToken;
+    delete userResponse.changePasswordTokenExpire;
+    delete userResponse.cart;
+
+    return NextResponse.json(userResponse, {status: 201});
   } catch (err: unknown) {
     if (err instanceof Error) {
       return NextResponse.json(

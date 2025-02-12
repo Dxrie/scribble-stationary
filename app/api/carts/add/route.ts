@@ -9,7 +9,7 @@ export async function POST(request: Request) {
         await connect();
 
         const body = await request.json();
-        const {userId, itemId} = body;
+        const {userId, itemId, total} = body;
 
         const product = await ProductModel.findById(itemId);
 
@@ -29,9 +29,13 @@ export async function POST(request: Request) {
         }) => item.product.toString() === itemId);
 
         if (existingCartItem) {
-            existingCartItem.total += 1;
+            if (total) {
+                existingCartItem.total += total;
+            } else {
+                existingCartItem.total += 1;
+            }
         } else {
-            user.cart.push({product: itemId});
+            user.cart.push({product: itemId, total: total ? total : 1});
         }
 
         await user.save();

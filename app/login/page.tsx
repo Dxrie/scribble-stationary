@@ -73,7 +73,7 @@ export default function Login() {
                 "error"
               );
 
-            const expires = new Date(Date.now() + 60 * 60 * 1000);
+            const expires = new Date(Date.now() + 60 * 60 * 1000 * 24);
             const session = await encrypt({data, expires});
 
             setCookie("session", session, {

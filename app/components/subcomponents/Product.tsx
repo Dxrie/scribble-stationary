@@ -1,25 +1,21 @@
 "use client";
-import {formatToCurrency, IProduct, showSwal} from "@/app/lib/libs";
-import React, {useEffect, useState} from "react";
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
+import {decrypt, formatToCurrency, IProduct, showSwal} from "@/app/lib/libs";
+import React, {useCallback, useEffect, useState} from "react";
+import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,} from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
 import {Add, Remove} from "@mui/icons-material";
 import {useMediaQuery} from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery} from "@tanstack/react-query";
 import getProducts from "@/app/utils/getProducts";
 import {ArrowUpRight} from "lucide-react";
+import addToCart from "@/app/utils/addToCart";
+import {getCookie, setCookie} from "cookies-next/client";
 
 const Product = () => {
     const [quantity, setQuantity] = useState(1);
+    const [userId, setUserId] = useState<string | null>(null);
     const {data, error, isError, isFetching} = useQuery<IProduct[]>({
         queryFn: getProducts,
         queryKey: ["products"],
@@ -30,19 +26,58 @@ const Product = () => {
     const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
     const match = useMediaQuery("(min-width:1024px)");
 
-    const handleAddToCart = () => {
-        if (selectedProduct) {
-            console.log(`Added ${quantity} of ${selectedProduct.name} to the cart.`);
+    const mutation = useMutation({
+        mutationFn: (data: {
+            productId: string,
+            userId: string,
+            total: number
+        }) => addToCart(data.productId, data.userId, data.total),
+        onSuccess: (data) => {
+            showSwal("Success", data.message, "success");
+        },
+        onError: (error) => {
+            showSwal("Error", error.message, "error");
         }
-        setQuantity(1);
-        setSelectedProduct(null);
-    };
+    });
+
+    const addToCartCallback = useCallback(() => {
+        if (mutation.isPending) return;
+
+        if (!(selectedProduct?._id && userId)) return showSwal("Error", "Please create an account or login before adding this item to cart.", "error");
+
+        mutation.mutate({productId: selectedProduct._id, userId, total: quantity >= 1 ? quantity : 1});
+    }, [mutation, selectedProduct, userId, quantity]);
 
     useEffect(() => {
         if (error instanceof Error) {
             showSwal("Error", error.message, "error");
         }
     }, [error]);
+
+    useEffect(() => {
+        const decryptFunc = async () => {
+            const cookie = getCookie("session");
+
+            if (cookie) {
+                try {
+                    const payload = await decrypt(cookie) as { data: { _id: string } };
+
+                    if (payload) {
+                        setUserId(payload.data._id);
+                    }
+                } catch (err: unknown) {
+                    if (err instanceof Error) {
+                        console.log(err.message);
+                        setCookie("session", "", {expires: new Date(0)});
+                    } else {
+                        console.log("An error occured.");
+                    }
+                }
+            }
+        };
+
+        decryptFunc();
+    }, []);
 
     return (
         <div>
@@ -80,7 +115,8 @@ const Product = () => {
                         >
                             <div>
                                 {/* Image Container */}
-                                <div className="w-[250px] h-[200px] overflow-hidden bg-gray-200 rounded-lg rounded-b-none">
+                                <div
+                                    className="w-[250px] h-[200px] overflow-hidden bg-gray-200 rounded-lg rounded-b-none">
                                     <Image
                                         src={product.image}
                                         alt={product.name}
@@ -168,13 +204,7 @@ const Product = () => {
                                                     <h1 className="font-bold">{quantity}</h1>
                                                     <Button
                                                         onClick={() =>
-                                                            setQuantity(
-                                                                selectedProduct?.stock
-                                                                    ? quantity < selectedProduct?.stock
-                                                                        ? quantity + 1
-                                                                        : quantity
-                                                                    : quantity
-                                                            )
+                                                            setQuantity(quantity + 1)
                                                         }
                                                     >
                                                         <Add/>
@@ -184,7 +214,7 @@ const Product = () => {
                                         </div>
                                         <DialogFooter className="sm:justify-start">
                                             <DialogTrigger asChild>
-                                                <Button onClick={handleAddToCart}>
+                                                <Button onClick={addToCartCallback}>
                                                     Add to Cart
                                                 </Button>
                                             </DialogTrigger>
@@ -202,7 +232,7 @@ const Product = () => {
                                 <Link href={`/product/?id=${product._id}`}>
                                     <div
                                         className="bg-[#264653] hover:bg-gray-950 p-2 rounded-full transition-colors duration-150">
-                                        <ArrowUpRight className={"text-white"} /></div>
+                                        <ArrowUpRight className={"text-white"}/></div>
                                 </Link>
                             </div>
                         </div>

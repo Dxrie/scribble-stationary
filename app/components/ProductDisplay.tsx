@@ -1,7 +1,7 @@
 "use client";
 import {decrypt, formatToCurrency, IProduct, showSwal} from "@/app/lib/libs";
 import Image from "next/image";
-import {Suspense, useCallback, useEffect, useState} from "react";
+import {Suspense, useCallback, useEffect, useMemo, useState} from "react";
 import {Favorite} from "@mui/icons-material";
 import {useRouter, useSearchParams} from "next/navigation";
 import ProductNavbar from "@/app/components/ProductNavbar";
@@ -19,15 +19,17 @@ const ProductDisplayContent = () => {
     const [imageLoaded, setImageLoaded] = useState(false);
     const [userId, setUserId] = useState<string | null>(null);
 
-    const {data: product, error} = useQuery<IProduct>({
+    const {data, error} = useQuery<IProduct>({
         queryFn: () => getProduct(productId),
         queryKey: ["product"],
         retry: false,
         refetchOnWindowFocus: false
     });
 
+    const product = useMemo(() => data ?? null, [data]);
+
     const mutation = useMutation({
-        mutationFn: () => addToCart(productId, userId),
+        mutationFn: (data: {productId: string, userId: string}) => addToCart(data.productId, data.userId, 1),
         onSuccess: (data) => {
             showSwal("Success", data.message, "success");
         },
@@ -41,8 +43,8 @@ const ProductDisplayContent = () => {
 
         if (!(productId && userId)) return showSwal("Error", "Please create an account or login before adding this item to cart.", "error");
 
-        mutation.mutate();
-    }, [mutation]);
+        mutation.mutate({productId, userId});
+    }, [mutation, productId, userId]);
 
     useEffect(() => {
         if (error instanceof Error) {
@@ -52,7 +54,7 @@ const ProductDisplayContent = () => {
     }, [error]);
 
     useEffect(() => {
-        const decryptFunc = async () => {
+            const decryptFunc = async () => {
             const cookie = getCookie("session");
 
             if (cookie) {
@@ -73,14 +75,14 @@ const ProductDisplayContent = () => {
             }
         };
 
-        decryptFunc();
+            decryptFunc();
     }, []);
 
     return (
         <>
             <ProductNavbar/>
             <div
-                className="flex w-full h-full flex-col relative"> {/* Add padding-bottom to prevent content from being hidden behind the fixed button */}
+                className="flex w-full h-full flex-col relative bg-background"> {/* Add padding-bottom to prevent content from being hidden behind the fixed button */}
                 <div
                     className={`w-full border-gray-600 border-[0.02px] aspect-square relative bg-gray-300 ${imageLoaded ? "bg-transparent" : "animate-pulse"}`}>
                     {product ? <Image

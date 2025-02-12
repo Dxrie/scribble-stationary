@@ -1,11 +1,11 @@
-async function getData(productId: string | null) {
-    const response = await fetch("/api/products", {
+async function getData(userId: string | null) {
+    const response = await fetch("/api/carts", {
         method: "POST",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({id: productId}),
+        body: JSON.stringify({id: userId}),
     });
 
     if (!response.ok) {
@@ -16,6 +16,6 @@ async function getData(productId: string | null) {
     return await response.json();
 }
 
-export default function getProduct(productId: string | null) {
-    return getData(productId);
+export default function getCart(userId: string | null) {
+    return getData(userId);
 }
