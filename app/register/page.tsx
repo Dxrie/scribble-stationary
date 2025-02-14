@@ -6,6 +6,7 @@ import {decrypt, showSwal} from "../lib/libs";
 import {getCookie, setCookie} from "cookies-next/client";
 import {useRouter} from "next/navigation";
 import Transition from "../components/Transition";
+import API_KEY from "@/apiKey";
 
 export default function Register() {
   const router = useRouter();
@@ -66,6 +67,7 @@ export default function Register() {
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
+                "x-api-key": `${API_KEY}`,
               },
               body: JSON.stringify({
                 email: formData.email,

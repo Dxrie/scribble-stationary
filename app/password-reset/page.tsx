@@ -5,6 +5,7 @@ import {showSwal} from "../lib/libs";
 import {useRouter, useSearchParams} from "next/navigation";
 import Loading from "../components/Loading";
 import Transition from "../components/Transition";
+import API_KEY from "@/apiKey";
 
 function PasswordResetContent() {
   const searchParams = useSearchParams();
@@ -30,6 +31,7 @@ function PasswordResetContent() {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          "x-api-key": `${API_KEY}`,
         },
         body: JSON.stringify({
           id,

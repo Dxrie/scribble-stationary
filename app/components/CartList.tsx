@@ -2,14 +2,15 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getCookie, setCookie } from "cookies-next/client";
-import { decrypt, formatToCurrency, ICart, IProduct } from "@/app/lib/libs";
-import { useQuery } from "@tanstack/react-query";
+import {decrypt, formatToCurrency, ICart, IProduct, showSwal} from "@/app/lib/libs";
+import {useMutation, useQuery} from "@tanstack/react-query";
 import getCart from "@/app/utils/getCart";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
 import Loading from "@/app/components/Loading";
 import {debounce} from "lodash";
+import changeTotal from "@/app/utils/changeTotal";
 
 const CartList = () => {
     const [userId, setUserId] = useState<string | null>(null);
@@ -72,8 +73,19 @@ const CartList = () => {
         }
     }, [cartItems, isSelectedAll]);
 
+    const mutation = useMutation({
+        mutationFn: (data: {productId: string, userId: string | null, total: number}) => changeTotal(data.total, data.productId, data.userId),
+        onSuccess: (data) => {
+            showSwal("Success", data.message, "success");
+        },
+        onError: (error) => {
+            showSwal("Error", error.message, "error");
+        }
+    });
+
     const handleQuantityChange = useCallback((item: ICart, total: number) => {
         debounce(async () => {
+            mutation.mutate({productId: item.product._id, userId, total: item.total + total});
         }, 500);
     }, []);
 

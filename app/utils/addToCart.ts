@@ -1,7 +1,12 @@
+import API_KEY from "@/apiKey";
+
 async function postData(productId: string | null | undefined, userId: string | null | undefined, total: number | null | undefined) {
     const response = await fetch("/api/carts/add", {
         method: "POST",
         body: JSON.stringify({itemId: productId, userId, total}),
+        headers: {
+            "x-api-key": `${API_KEY}`,
+        }
     });
 
     if (!response.ok) {

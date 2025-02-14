@@ -1,9 +1,12 @@
+import API_KEY from "@/apiKey";
+
 async function getData(productId: string | null) {
     const response = await fetch("/api/products", {
         method: "POST",
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            "x-api-key": `${API_KEY}`,
         },
         body: JSON.stringify({id: productId}),
     });

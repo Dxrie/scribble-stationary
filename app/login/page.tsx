@@ -6,6 +6,7 @@ import {decrypt, encrypt, showSwal} from "../lib/libs";
 import {getCookie, setCookie} from "cookies-next/client";
 import {useRouter} from "next/navigation";
 import Transition from "../components/Transition";
+import API_KEY from "@/apiKey";
 
 export default function Login() {
   const router = useRouter();
@@ -54,6 +55,7 @@ export default function Login() {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
+              "x-api-key": `${API_KEY}`,
             },
             body: JSON.stringify({
               username: formData.username,

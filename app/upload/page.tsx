@@ -3,6 +3,7 @@
 import {FormEvent, useEffect, useState} from "react";
 import {getBase64} from "../lib/libs";
 import Transition from "../components/Transition";
+import API_KEY from "@/apiKey";
 
 export default function Page() {
   const categories = [
@@ -55,6 +56,7 @@ export default function Page() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-api-key": `${API_KEY}`,
       },
       body: JSON.stringify({image: base64Img, formData: formData}),
     });
