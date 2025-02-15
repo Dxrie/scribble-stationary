@@ -1,7 +1,7 @@
 import API_KEY from "@/apiKey";
 
 async function postData(total: number, productId: string, userId: string | null) {
-    const response = await fetch('/api/cart/changeTotal', {
+    const response = await fetch('/api/carts/changeTotal', {
         headers: {
             "x-api-key": `${API_KEY}`,
         },
