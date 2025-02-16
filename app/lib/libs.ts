@@ -62,6 +62,19 @@ export function showSwal(title: string, text: string, icon: SweetAlertIcon) {
   });
 }
 
+export function swalConfirm(title: string, text: string, icon: SweetAlertIcon, buttons: string[]) {
+  return withReactContent(Swal).fire({
+    title,
+    text,
+    icon,
+    confirmButtonText: buttons[0],
+    cancelButtonText: buttons[1],
+    showCancelButton: true,
+    showConfirmButton: true,
+    showCloseButton: false,
+  });
+}
+
 export function getBase64(file: File): Promise<string | ArrayBuffer | null> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

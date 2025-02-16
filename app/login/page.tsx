@@ -2,7 +2,7 @@
 import {createHash} from "crypto";
 import Link from "next/link";
 import React, {useCallback, useEffect, useState} from "react";
-import {decrypt, encrypt, showSwal} from "../lib/libs";
+import {decrypt, encrypt, showSwal, swalConfirm} from "../lib/libs";
 import {getCookie, setCookie} from "cookies-next/client";
 import {useRouter} from "next/navigation";
 import Transition from "../components/Transition";
@@ -68,12 +68,13 @@ export default function Login() {
           if (response.ok) {
             const data = await response.json();
 
-            if (!data.isVerified)
-              return showSwal(
-                "Error",
-                "Account isn't verified, please check your email inbox.",
-                "error"
-              );
+            if (!data.isVerified && new Date(data.verifyTokenExpire) > new Date()) {
+              return showSwal("Error", "Please check your email inbox to verify your account before logging in.", "error");
+            }
+
+            if (!data.isVerified && new Date(data.verifyTokenExpire) < new Date()) {
+              return;
+            }
 
             const expires = new Date(Date.now() + 60 * 60 * 1000 * 24);
             const session = await encrypt({data, expires});

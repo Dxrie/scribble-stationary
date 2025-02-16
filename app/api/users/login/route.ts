@@ -18,9 +18,7 @@ export async function POST(request: Request) {
       const userResponse = existingUser.toObject();
       delete userResponse.passwordHash;
       delete userResponse.verifyToken;
-      delete userResponse.verifyTokenExpire;
       delete userResponse.changePasswordToken;
-      delete userResponse.changePasswordTokenExpire;
       delete userResponse.cart;
 
       return NextResponse.json(userResponse, {status: 200});

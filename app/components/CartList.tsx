@@ -12,7 +12,6 @@ import Loading from "@/app/components/Loading";
 import changeTotal from "@/app/utils/changeTotal";
 import _ from "lodash";
 
-// Custom Hook for User ID
 const useUserId = () => {
     const [userId, setUserId] = useState<string | null>(null);
 
