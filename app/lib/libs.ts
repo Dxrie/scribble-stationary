@@ -59,6 +59,8 @@ export function showSwal(title: string, text: string, icon: SweetAlertIcon) {
     title,
     text,
     icon,
+    timerProgressBar: true,
+    timer: 5000,
   });
 }
 
@@ -68,10 +70,12 @@ export function swalConfirm(title: string, text: string, icon: SweetAlertIcon, b
     text,
     icon,
     confirmButtonText: buttons[0],
-    cancelButtonText: buttons[1],
-    showCancelButton: true,
+    denyButtonText: buttons[1],
     showConfirmButton: true,
+    showDenyButton: true,
     showCloseButton: false,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
   });
 }
 

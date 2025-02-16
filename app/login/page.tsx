@@ -72,8 +72,32 @@ export default function Login() {
               return showSwal("Error", "Please check your email inbox to verify your account before logging in.", "error");
             }
 
-            if (!data.isVerified && new Date(data.verifyTokenExpire) < new Date()) {
-              return;
+            if (!data.isVerified && new Date(data.verifyTokenExpire) <= new Date()) {
+              const response = await swalConfirm("Error", "Your verification token has expired, do you want to create a new one?", "error", ["Yes", "No"]);
+
+              if (response.isConfirmed) {
+                const response = await fetch('/api/email/updateVerifyToken', {
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "x-api-key": `${API_KEY}`,
+                  },
+                  method: 'POST',
+                  body: JSON.stringify({
+                    id: data._id.toString()
+                  }),
+                });
+
+                if (!response.ok) {
+                  const errorData = await response.json();
+
+                  return showSwal("Error", "An error occurred while creating a new verification token: " + errorData.message, "error");
+                }
+
+                return showSwal("Success", "Please check your email inbox to verify your account before logging in.", "success");
+              } else {
+                return showSwal("Error", "Login cancelled.", "error");
+              }
             }
 
             const expires = new Date(Date.now() + 60 * 60 * 1000 * 24);
