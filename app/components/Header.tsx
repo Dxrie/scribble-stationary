@@ -2,8 +2,8 @@
 import {getCookie, setCookie} from "cookies-next/client";
 import React, {useEffect, useState} from "react";
 import {decrypt} from "../lib/libs";
-import NotLoggedInHeader from "./subcomponents/NotLoggedInHeader";
-import LoggedInHeader from "./subcomponents/LoggedInHeader";
+import NotLoggedInHeader from "./NotLoggedInHeader";
+import LoggedInHeader from "./LoggedInHeader";
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

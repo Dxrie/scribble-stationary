@@ -123,7 +123,7 @@ const CartList = () => {
     const fetchChangeTotalItemServerCallback = useMemo(() =>
             _.debounce((total: number, productId: string, userId: string | null) => {
                 mutation.mutate({ total, productId, userId });
-            }, 500),
+            }, 1000),
         []);
 
     const changeTotalItemCallback = useCallback(

@@ -1,6 +1,6 @@
 "use server";
 import React from "react";
-import Product from "./subcomponents/Product";
+import Product from "./Product";
 // import {x} from "../lib/libs";
 
 const Recommendation = () => {
