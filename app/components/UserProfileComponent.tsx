@@ -1,9 +1,8 @@
 "use client";
 
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {useContext, useEffect, useLayoutEffect} from "react";
+import {useContext, useLayoutEffect} from "react";
 import {UserContext} from "../context/UserContext";
-import {showSwal} from "../lib/libs";
 import {useRouter} from "next/navigation";
 import {ArrowForwardIos} from "@mui/icons-material";
 import Link from "next/link";

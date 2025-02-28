@@ -18,15 +18,6 @@ const AddressSchema = new Schema({
   label: {
     type: String,
     required: true,
-    validate: {
-      validator: function(this: any, label: string): boolean {
-        const user = this.parent();
-        return !user.address.some((addr: { label: string; _id: any }) => 
-          addr.label === label && !addr._id.equals(this._id)
-        );
-      },
-      message: 'Address label must be unique for this user'
-    }
   },
   deliveryInstruction: {
     type: String,

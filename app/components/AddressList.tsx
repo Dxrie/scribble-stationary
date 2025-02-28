@@ -1,12 +1,10 @@
 "use client";
 
 import {IAddress} from "@/app/lib/models/user";
-import {useCallback, useContext, useEffect, useMemo} from "react";
+import {useCallback, useContext, useEffect} from "react";
 import {UserContext} from "@/app/context/UserContext";
 import {useRouter} from "next/navigation";
-import {useMutation, useQuery} from "@tanstack/react-query";
-import _ from "lodash";
-import {showSwal} from "../lib/libs";
+import {useQuery} from "@tanstack/react-query";
 import getAddress from "../utils/getAddress";
 
 const AddressList = () => {
@@ -21,8 +19,8 @@ const AddressList = () => {
 
   const {
     data: addresses,
-    isFetching,
-    error,
+    // isFetching,
+    // error,
   } = useQuery<IAddress[]>({
     queryFn: () => getAddress(user?._id),
     queryKey: ["addresses"],
