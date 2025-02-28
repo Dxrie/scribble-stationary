@@ -1,6 +1,6 @@
 "use client";
-import {decrypt, formatToCurrency, IProduct, showSwal} from "@/app/lib/libs";
-import React, {useCallback, useEffect, useState} from "react";
+import {formatToCurrency, IProduct, showSwal} from "@/app/lib/libs";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,} from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
 import {Add, Remove} from "@mui/icons-material";
@@ -11,11 +11,10 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 import getProducts from "@/app/utils/getProducts";
 import {ArrowUpRight} from "lucide-react";
 import addToCart from "@/app/utils/addToCart";
-import {getCookie, setCookie} from "cookies-next/client";
+import {UserContext} from "@/app/context/UserContext";
 
 const Product = () => {
     const [quantity, setQuantity] = useState(1);
-    const [userId, setUserId] = useState<string | null>(null);
     const {data, error, isError, isFetching} = useQuery<IProduct[]>({
         queryFn: getProducts,
         queryKey: ["products"],
@@ -25,6 +24,13 @@ const Product = () => {
     });
     const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
     const match = useMediaQuery("(min-width:1024px)");
+    const userContext = useContext(UserContext);
+
+    if (!userContext) {
+        throw new Error("UserContext must be used within a user context");
+    }
+
+    const {user} = userContext;
 
     const mutation = useMutation({
         mutationFn: (data: {
@@ -43,41 +49,18 @@ const Product = () => {
     const addToCartCallback = useCallback(() => {
         if (mutation.isPending) return;
 
-        if (!(selectedProduct?._id && userId)) return showSwal("Error", "Please create an account or login before adding this item to cart.", "error");
+        if (!(selectedProduct?._id && user?._id)) return showSwal("Error", "Please create an account or login before adding this item to cart.", "error");
+
+        const userId = user._id;
 
         mutation.mutate({productId: selectedProduct._id, userId, total: quantity >= 1 ? quantity : 1});
-    }, [mutation, selectedProduct, userId, quantity]);
+    }, [mutation, selectedProduct, user?._id, quantity]);
 
     useEffect(() => {
         if (error instanceof Error) {
             showSwal("Error", error.message, "error");
         }
     }, [error]);
-
-    useEffect(() => {
-        const decryptFunc = async () => {
-            const cookie = getCookie("session");
-
-            if (cookie) {
-                try {
-                    const payload = await decrypt(cookie) as { data: { _id: string } };
-
-                    if (payload) {
-                        setUserId(payload.data._id);
-                    }
-                } catch (err: unknown) {
-                    if (err instanceof Error) {
-                        console.log(err.message);
-                        setCookie("session", "", {expires: new Date(0)});
-                    } else {
-                        console.log("An error occured.");
-                    }
-                }
-            }
-        };
-
-        decryptFunc();
-    }, []);
 
     return (
         <div>

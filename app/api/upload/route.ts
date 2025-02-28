@@ -9,25 +9,6 @@ export const config = {
 };
 
 export async function POST(request: Request) {
-  // try {
-  //   const data = await request.formData();
-
-  //   const file: File | null = data.get("file") as unknown as File;
-  //   const response = await fetch("/api/upload", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({})
-  //   })
-
-  //   return NextResponse.json("test");
-  // } catch (err: unknown) {
-  //   if (err instanceof Error) {
-  //     return NextResponse.json(err);
-  //   }
-  // }
-
   try {
     await connect();
 

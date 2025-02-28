@@ -74,6 +74,7 @@ function PasswordResetContent() {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            "x-api-key": `${API_KEY}`,
           },
           body: JSON.stringify({
             email,
@@ -126,6 +127,7 @@ function PasswordResetContent() {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          "x-api-key": `${API_KEY}`,
         },
         body: JSON.stringify({
           userId: id,
@@ -163,7 +165,7 @@ function PasswordResetContent() {
     if (validToken && isLoading === false) {
       return (
         <Transition>
-          <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#E76F51]">
+          <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-primary to-[#2A9D8F]">
             <span className="flex justify-center items-center gap-3">
               <img
                 alt="logo"
@@ -232,7 +234,7 @@ function PasswordResetContent() {
   } else {
     return (
       <Transition>
-        <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#2A9D8F]">
+        <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-primary to-[#2A9D8F]">
           <span className="flex justify-center items-center gap-3">
             <img
               alt="logo"

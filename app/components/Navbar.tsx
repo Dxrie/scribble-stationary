@@ -29,7 +29,7 @@ const Navbar = () => {
           </span>
         </Link>
 
-        <Link href={"/settings"}>
+        <Link href={"/user"}>
           <span className="flex flex-col items-center">
             <PersonOutlineRounded className="text-[30px]" />
           </span>

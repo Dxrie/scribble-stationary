@@ -1,67 +1,145 @@
 import {model, models, Schema, SchemaTypes} from "mongoose";
 
-const CartItemSchema = new Schema({
-    product: {
-        type: SchemaTypes.ObjectId,
-        ref: 'Product',
-        required: true,
-    },
-    total: {
-        type: Number,
-        required: true,
-        default: 1,
-        min: 1,
-    },
+export const CartItemSchema = new Schema({
+  product: {
+    type: SchemaTypes.ObjectId,
+    ref: "Product",
+    required: true,
+  },
+  total: {
+    type: Number,
+    required: true,
+    default: 1,
+    min: 1,
+  },
 });
 
-const UserSchema = new Schema(
-    {
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-        username: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-        passwordHash: {
-            type: String,
-            required: true,
-        },
-        isAdmin: {
-            type: Boolean,
-            default: false,
-        },
-        isVerified: {
-            type: Boolean,
-            default: false,
-        },
-        verifyToken: {
-            type: String,
-            default: null,
-        },
-        verifyTokenExpire: {
-            type: Date,
-            default: null,
-        },
-        changePasswordToken: {
-            type: String,
-            default: null,
-        },
-        changePasswordTokenExpire: {
-            type: Date,
-            default: null,
-        },
-        cart: {
-            type: [CartItemSchema],
-            default: [],
-        },
-    },
-    {
-        timestamps: true,
+const AddressSchema = new Schema({
+  label: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function(this: any, label: string): boolean {
+        const user = this.parent();
+        return !user.address.some((addr: { label: string; _id: any }) => 
+          addr.label === label && !addr._id.equals(this._id)
+        );
+      },
+      message: 'Address label must be unique for this user'
     }
+  },
+  deliveryInstruction: {
+    type: String,
+    required: true,
+  },
+  fullName: {
+    type: String,
+    required: true,
+  },
+  phoneNumber: {
+    type: String,
+    required: true,
+  },
+  streetAddress: {
+    type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+  province: {
+    type: String,
+    required: true,
+  },
+  postalCode: {
+    type: String,
+    required: true,
+  },
+});
+
+export interface IAddress {
+  _id: string;
+  label: string;
+  deliveryInstruction: string;
+  fullName: string;
+  phoneNumber: string;
+  streetAddress: string;
+  city: string;
+  province: string;
+  postalCode: string;
+}
+
+export interface IUser {
+  _id: string;
+  email: string;
+  username: string;
+  isAdmin: boolean;
+  isVerified: boolean;
+  changePasswordTokenExpire: Date | null;
+  verifyTokenExpire: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+  address: [IAddress];
+  avatar: string | undefined;
+}
+
+const UserSchema = new Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    avatar: {
+      type: String,
+      default: undefined,
+    },
+    passwordHash: {
+      type: String,
+      required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verifyToken: {
+      type: String,
+      default: null,
+    },
+    verifyTokenExpire: {
+      type: Date,
+      default: null,
+    },
+    changePasswordToken: {
+      type: String,
+      default: null,
+    },
+    changePasswordTokenExpire: {
+      type: Date,
+      default: null,
+    },
+    cart: {
+      type: [CartItemSchema],
+      default: [],
+    },
+    address: {
+      type: [AddressSchema],
+      default: [],
+    },
+  },
+  {
+    timestamps: true,
+  }
 );
 
 const UserModel = models.User || model("User", UserSchema);

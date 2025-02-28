@@ -20,6 +20,7 @@ export async function POST(request: Request) {
       delete userResponse.verifyToken;
       delete userResponse.changePasswordToken;
       delete userResponse.cart;
+      delete userResponse.address;
 
       return NextResponse.json(userResponse, {status: 200});
     }

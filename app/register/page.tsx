@@ -1,41 +1,28 @@
 "use client";
 import {createHash} from "crypto";
 import Link from "next/link";
-import React, {useCallback, useEffect, useState} from "react";
-import {decrypt, showSwal} from "../lib/libs";
-import {getCookie, setCookie} from "cookies-next/client";
+import React, {useCallback, useContext, useEffect, useState} from "react";
+import {showSwal} from "../lib/libs";
 import {useRouter} from "next/navigation";
 import Transition from "../components/Transition";
 import API_KEY from "@/apiKey";
+import {UserContext} from "@/app/context/UserContext";
 
 export default function Register() {
   const router = useRouter();
+  const userContext = useContext(UserContext);
+
+  if (!userContext) {
+    throw new Error("UserContext must be used within a user context");
+  }
+
+  const {user} = userContext;
 
   useEffect(() => {
-    const decryptFunc = async () => {
-      const cookie = getCookie("session");
-
-      if (cookie) {
-        try {
-          const payload = await decrypt(cookie);
-
-          if (payload) {
-            console.log("test");
-            router.push("/");
-          }
-        } catch (err: unknown) {
-          if (err instanceof Error) {
-            console.log(err.message);
-            setCookie("session", "", {expires: new Date(0)});
-          } else {
-            console.log("An error occured.");
-          }
-        }
-      }
-    };
-
-    decryptFunc();
-  }, [router]);
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -110,7 +97,7 @@ export default function Register() {
 
   return (
     <Transition>
-      <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-[#264653] to-[#2A9D8F]">
+      <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-gradient-to-r from-primary to-[#2A9D8F]">
         <span className="flex justify-center items-center gap-3">
           <img
             alt="logo"

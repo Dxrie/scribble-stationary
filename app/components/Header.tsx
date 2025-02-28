@@ -1,36 +1,19 @@
 "use client";
-import {getCookie, setCookie} from "cookies-next/client";
-import React, {useEffect, useState} from "react";
-import {decrypt} from "../lib/libs";
+import React, {useContext} from "react";
 import NotLoggedInHeader from "./NotLoggedInHeader";
 import LoggedInHeader from "./LoggedInHeader";
+import {UserContext} from "@/app/context/UserContext";
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const userContext = useContext(UserContext);
 
-  useEffect(() => {
-    const checkCookie = async () => {
-      const session = getCookie("session");
+  if (!userContext) {
+    throw new Error("UserContext must be used within a user context");
+  }
 
-      if (session) {
-        try {
-          await decrypt(session);
+  const {user} = userContext;
 
-          setIsLoggedIn(true);
-        } catch (err: unknown) {
-          if (err instanceof Error) {
-            setCookie("session", "", {expires: new Date(0)});
-          } else {
-            setCookie("session", "", {expires: new Date(0)});
-          }
-        }
-      }
-    };
-
-    checkCookie();
-  }, []);
-
-  return isLoggedIn ? <LoggedInHeader /> : <NotLoggedInHeader />;
+  return user ? <LoggedInHeader /> : <NotLoggedInHeader />;
 };
 
 export default Header;

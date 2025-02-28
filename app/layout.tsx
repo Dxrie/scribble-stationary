@@ -2,8 +2,9 @@ import type {Metadata} from "next";
 import {Geist, Geist_Mono, Poppins, Quicksand} from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "@/app/utils/ReactQueryProvider";
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import {Analytics} from "@vercel/analytics/react"
+import {SpeedInsights} from "@vercel/speed-insights/next"
+import {UserContextProvider} from "@/app/context/UserContext";
 
 
 const geistSans = Geist({
@@ -50,11 +51,13 @@ export default function RootLayout({
         <body
             className={`${geistSans.variable} ${geistMono.variable} ${quicksand.variable} ${poppins.variable} antialiased`}
         >
-        <ReactQueryProvider>
-            <main>{children}</main>
-            <Analytics />
-            <SpeedInsights />
-        </ReactQueryProvider>
+        <UserContextProvider>
+            <ReactQueryProvider>
+                <main>{children}</main>
+                <Analytics/>
+                <SpeedInsights/>
+            </ReactQueryProvider>
+        </UserContextProvider>
         </body>
         </html>
     );

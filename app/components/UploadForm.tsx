@@ -10,20 +10,16 @@ type FormValues = {
     proofOfPayment?: File;
 };
 
-const UploadForm = () => {
+const UploadForm = ({setProofOfPayment}: {setProofOfPayment: (file: File | null) => void}) => {
     const form = useForm<FormValues>({
         defaultValues: {
             proofOfPayment: undefined,
         },
     });
 
-    const onSubmit = (data: FormValues) => {
-        console.log(data.proofOfPayment); // Handle file upload logic here
-    };
-
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form className="space-y-8">
                 <FormField
                     control={form.control}
                     name="proofOfPayment"
@@ -33,16 +29,19 @@ const UploadForm = () => {
                                 <Dropzone
                                     onDrop={(acceptedFiles: File[]) => {
                                         field.onChange(acceptedFiles[0]);
+                                        setProofOfPayment(acceptedFiles[0]);
                                     }}
                                     file={field.value}
-                                    onRemove={() => field.onChange(undefined)}
+                                    onRemove={() => {
+                                        field.onChange(undefined);
+                                        setProofOfPayment(null);
+                                    }}
                                 />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Submit</Button>
             </form>
         </Form>
     );

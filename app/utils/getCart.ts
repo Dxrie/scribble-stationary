@@ -1,6 +1,6 @@
 import API_KEY from "@/apiKey";
 
-async function getData(userId: string | null) {
+async function getData(userId: string | undefined) {
     const response = await fetch("/api/carts", {
         method: "POST",
         headers: {
@@ -19,6 +19,6 @@ async function getData(userId: string | null) {
     return await response.json();
 }
 
-export default function getCart(userId: string | null) {
+export default function getCart(userId: string | undefined) {
     return getData(userId);
 }
