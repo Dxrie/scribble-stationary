@@ -1,5 +1,5 @@
 import {Schema, model, models, SchemaTypes} from "mongoose";
-import {CartItemSchema} from "@/app/lib/models/user";
+import {AddressSchema, CartItemSchema} from "@/app/lib/models/user";
 
 const CheckoutSchema = new Schema(
     {
@@ -21,7 +21,7 @@ const CheckoutSchema = new Schema(
             required: true,
         },
         address: {
-            type: String,
+            type: AddressSchema,
             required: true,
         }
     },

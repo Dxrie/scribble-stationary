@@ -14,7 +14,7 @@ export const CartItemSchema = new Schema({
   },
 });
 
-const AddressSchema = new Schema({
+export const AddressSchema = new Schema({
   label: {
     type: String,
     required: true,

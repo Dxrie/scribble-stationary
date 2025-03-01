@@ -1,7 +1,8 @@
 import API_KEY from "@/apiKey";
 import {getBase64, ICart} from "@/app/lib/libs";
+import { IAddress } from "../lib/models/user";
 
-async function postData(userId: string, products: ICart[], proofOfPayment: File, address: string) {
+async function postData(userId: string, products: ICart[], proofOfPayment: File, address: IAddress | undefined) {
     let base64Img = await getBase64(proofOfPayment);
 
     if (typeof base64Img === "string") {
@@ -29,6 +30,6 @@ async function postData(userId: string, products: ICart[], proofOfPayment: File,
     return await response.json();
 }
 
-export default function placeOrder(userId: string, products: ICart[], proofOfPayment: File, address: string) {
+export default function placeOrder(userId: string, products: ICart[], proofOfPayment: File, address: IAddress | undefined) {
     return postData(userId, products, proofOfPayment, address);
 }

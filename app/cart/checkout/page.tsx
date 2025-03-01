@@ -19,6 +19,7 @@ import {useMutation} from "@tanstack/react-query";
 import placeOrder from "@/app/utils/placeOrder";
 import Link from "next/link";
 import PrivateRoute from "@/app/components/PrivateRoute";
+import { IAddress } from "@/app/lib/models/user";
 
 export default function Checkout() {
   const router = useRouter();
@@ -32,7 +33,7 @@ export default function Checkout() {
       userId: string;
       products: ICart[];
       proofOfPayment: File;
-      address: string;
+      address: IAddress | undefined;
     }) =>
       placeOrder(data.userId, data.products, data.proofOfPayment, data.address),
     onSuccess: (data) => {
@@ -49,8 +50,7 @@ export default function Checkout() {
   if (!userContext) {
     throw new Error("UserContext must be used within a user context");
   }
-
-  const {user, checkoutItems, setCheckoutItems} = userContext;
+  const {user, checkoutItems, setCheckoutItems, defaultAddress} = userContext;
 
   const subtotal = useMemo(() => {
     return checkoutItems.reduce(
@@ -62,7 +62,7 @@ export default function Checkout() {
   const placeOrderCallback = useCallback(() => {
     const userId = user?._id;
     const products = checkoutItems;
-    const address = "Sigma sigma";
+    const address = defaultAddress;
 
     if (!userId) {
       showSwal("Error", "You are not logged in.", "error");
@@ -93,10 +93,12 @@ export default function Checkout() {
               <div className="flex items-center h-full gap-[5%]">
                 <LocationOn className="text-primary" fontSize="large" />
                 <div className="flex flex-col">
-                  <p>Deliver to</p>
-                  <h1 className="text-lg font-semibold line-clamp-1">
-                    Home - Dirgandini, No 8
-                  </h1>
+                  <p>Address</p>
+                  {defaultAddress ? (
+                    <h1 className="text-lg font-semibold line-clamp-1">
+                      {defaultAddress.streetAddress}
+                    </h1>
+                  ) : null}
                 </div>
               </div>
               <ArrowForwardIos className="text-primary" fontSize="medium" />

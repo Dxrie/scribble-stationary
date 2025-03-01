@@ -1,7 +1,7 @@
 "use client";
 
 import React, {createContext, useEffect, useState} from "react";
-import {IUser} from "@/app/lib/models/user";
+import {IAddress, IUser} from "@/app/lib/models/user";
 import {getCookie, setCookie} from "cookies-next/client";
 import {decrypt, ICart} from "@/app/lib/libs";
 
@@ -11,8 +11,8 @@ interface IUserContext {
   checkoutItems: ICart[];
   setCheckoutItems: React.Dispatch<React.SetStateAction<ICart[]>>;
   isLoadingUser: boolean;
-  defaultAddress: string | undefined;
-  setDefaultAddress: React.Dispatch<React.SetStateAction<string | undefined>>;
+  defaultAddress: IAddress | undefined;
+  setDefaultAddress: React.Dispatch<React.SetStateAction<IAddress | undefined>>;
 }
 
 export const UserContext = createContext<IUserContext | undefined>(undefined);
@@ -21,11 +21,15 @@ export const UserContextProvider: React.FC<{children: React.ReactNode}> = ({
   children,
 }) => {
   const [user, setUser] = useState<IUser | undefined>(undefined);
-  const [defaultAddress, setDefaultAddress] = useState<string | undefined>(
+  const [defaultAddress, setDefaultAddress] = useState<IAddress | undefined>(
     undefined
   );
   const [isLoadingUser, setIsLoadingUser] = useState(false);
   const [checkoutItems, setCheckoutItems] = useState<ICart[]>([]);
+
+  useEffect(() => {
+    if (defaultAddress) localStorage.setItem("defaultAddress", JSON.stringify(defaultAddress));
+  }, [defaultAddress])
 
   useEffect(() => {
     const decryptFunc = async () => {
@@ -43,7 +47,7 @@ export const UserContextProvider: React.FC<{children: React.ReactNode}> = ({
         const defaultAddr = localStorage.getItem("defaultAddress");
 
         if (defaultAddr && typeof defaultAddr === "string") {
-            setDefaultAddress(defaultAddr);
+            setDefaultAddress(JSON.parse(defaultAddr));
         } else {
             localStorage.removeItem("defaultAddress");
         }
