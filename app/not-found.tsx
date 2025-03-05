@@ -9,8 +9,7 @@ export default function NotFoundPage() {
   return (
     <Transition>
       <div
-        className="flex flex-col items-center justify-center min-h-screen text-center p-4"
-        style={{backgroundColor: "#FAF9F6"}}
+        className="flex flex-col items-center justify-center min-h-screen text-center p-4 bg-background"
       >
         {/* Title */}
         <h1 className="text-6xl font-bold text-black mb-4">404</h1>

@@ -19,10 +19,6 @@ export const AddressSchema = new Schema({
     type: String,
     required: true,
   },
-  deliveryInstruction: {
-    type: String,
-    required: true,
-  },
   fullName: {
     type: String,
     required: true,
@@ -52,7 +48,6 @@ export const AddressSchema = new Schema({
 export interface IAddress {
   _id: string;
   label: string;
-  deliveryInstruction: string;
   fullName: string;
   phoneNumber: string;
   streetAddress: string;

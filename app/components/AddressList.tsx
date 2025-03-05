@@ -4,23 +4,34 @@ import {IAddress} from "@/app/lib/models/user";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {UserContext} from "@/app/context/UserContext";
 import {useRouter} from "next/navigation";
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import getAddress from "../utils/getAddress";
 import {Plus} from "lucide-react";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
-import { DialogHeader, Dialog, DialogContent, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
+import addAddress from "@/app/utils/addAddress";
+import {showSwal} from "@/app/lib/libs";
 
 const AddressList = () => {
   const router = useRouter();
   const userContext = useContext(UserContext);
+  const queryClient = useQueryClient();
 
   if (!userContext) {
     throw new Error("UserContext must be used within a user context");
   }
 
   const {user, isLoadingUser, defaultAddress, setDefaultAddress} = userContext;
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const {
     data: addresses,
@@ -52,7 +63,7 @@ const AddressList = () => {
     streetAddress: "",
     city: "",
     province: "",
-    postalCode: ""
+    postalCode: "",
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -90,20 +101,45 @@ const AddressList = () => {
     return true;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log('Form Data:');
-      console.log('Label:', formData.label);
-      console.log('Full Name:', formData.fullName);
-      console.log('Phone Number:', formData.phoneNumber);
-      console.log('Street Address:', formData.streetAddress);
-      console.log('City:', formData.city);
-      console.log('Province:', formData.province);
-      console.log('Postal Code:', formData.postalCode);
-      console.log('Complete Form Data:', formData);
-    }
+  const mutation = useMutation({
+    mutationFn: (data: IAddress) => addAddress(user?._id, data),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({queryKey: ["addresses"]});
+      setFormData({
+        label: "",
+        fullName: "",
+        phoneNumber: "",
+        streetAddress: "",
+        city: "",
+        province: "",
+        postalCode: "",
+      });
+      setError(null);
+      setIsOpen(false);
+      showSwal("Success", data.message, "success");
+    },
+    onError: (data) => {
+      setFormData({
+        label: "",
+        fullName: "",
+        phoneNumber: "",
+        streetAddress: "",
+        city: "",
+        province: "",
+        postalCode: "",
+      });
+      setError(null);
+      setIsOpen(false);
+      showSwal("Error", data.message, "error");
+    },
+  });
+
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
+
+    mutation.mutate({...formData, _id: ""});
   };
+
   return (
     <>
       <ul className="px-4 py-2 space-y-3">
@@ -138,7 +174,7 @@ const AddressList = () => {
         ))}
       </ul>
       <div className="w-full flex absolute bottom-5 justify-center">
-        <Dialog>
+        <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
           <DialogTrigger>
             <div className="bg-primary p-3 rounded-full shadow-md hover:bg-black transition-color">
               <Plus className="text-primary-foreground" />
@@ -147,72 +183,97 @@ const AddressList = () => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Add new Address</DialogTitle>
-              <DialogDescription>Fill in the details for your new address.</DialogDescription>
+              <DialogDescription className="text-gray-600">
+                Fill in the details for your new address.
+              </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form className="space-y-4">
               {error && (
                 <Alert variant="destructive">
                   <AlertTitle>Error</AlertTitle>
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
-              <div>
-                <label className="text-sm font-medium">Label</label>
-                <Input 
-                  placeholder="Home, Office, etc." 
+              <div className="space-y-2">
+                <Input
+                  placeholder="Home, Office, etc."
                   value={formData.label}
-                  onChange={(e) => setFormData({...formData, label: e.target.value})}
+                  onChange={(e) => {
+                    setFormData({...formData, label: e.target.value});
+                    setError(null);
+                  }}
+                  className="placeholder:text-gray-500"
                 />
               </div>
-              <div>
-                <label className="text-sm font-medium">Full Name</label>
-                <Input 
-                  placeholder="Enter your full name" 
+              <div className="space-y-2">
+                <Input
+                  placeholder="Enter your full name"
                   value={formData.fullName}
-                  onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                  onChange={(e) => {
+                    setFormData({...formData, fullName: e.target.value});
+                    setError(null);
+                  }}
+                  className="placeholder:text-gray-500"
                 />
               </div>
-              <div>
-                <label className="text-sm font-medium">Phone Number</label>
-                <Input 
-                  placeholder="Enter your phone number" 
+              <div className="space-y-2">
+                <Input
+                  placeholder="Enter your phone number"
                   value={formData.phoneNumber}
-                  onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})}
+                  onChange={(e) => {
+                    setFormData({...formData, phoneNumber: e.target.value});
+                    setError(null);
+                  }}
+                  className="placeholder:text-gray-500"
                 />
               </div>
-              <div>
-                <label className="text-sm font-medium">Street Address</label>
-                <Input 
-                  placeholder="Enter your street address" 
+              <div className="space-y-2">
+                <Input
+                  placeholder="Enter your street address"
                   value={formData.streetAddress}
-                  onChange={(e) => setFormData({...formData, streetAddress: e.target.value})}
+                  onChange={(e) => {
+                    setFormData({...formData, streetAddress: e.target.value});
+                    setError(null);
+                  }}
+                  className="placeholder:text-gray-500"
                 />
               </div>
-              <div>
-                <label className="text-sm font-medium">City</label>
-                <Input 
-                  placeholder="Enter your city" 
+              <div className="space-y-2">
+                <Input
+                  placeholder="Enter your city"
                   value={formData.city}
-                  onChange={(e) => setFormData({...formData, city: e.target.value})}
+                  onChange={(e) => {
+                    setFormData({...formData, city: e.target.value});
+                    setError(null);
+                  }}
+                  className="placeholder:text-gray-500"
                 />
               </div>
-              <div>
-                <label className="text-sm font-medium">Province</label>
-                <Input 
-                  placeholder="Enter your province" 
+              <div className="space-y-2">
+                <Input
+                  placeholder="Enter your province"
                   value={formData.province}
-                  onChange={(e) => setFormData({...formData, province: e.target.value})}
+                  onChange={(e) => {
+                    setFormData({...formData, province: e.target.value});
+                    setError(null);
+                  }}
+                  className="placeholder:text-gray-500"
                 />
               </div>
-              <div>
-                <label className="text-sm font-medium">Postal Code</label>
-                <Input 
-                  placeholder="Enter your postal code" 
+              <div className="space-y-2">
+                <Input
+                  placeholder="Enter your postal code"
                   value={formData.postalCode}
-                  onChange={(e) => setFormData({...formData, postalCode: e.target.value})}
+                  onChange={(e) => {
+                    setFormData({...formData, postalCode: e.target.value});
+                    setError(null);
+                  }}
+                  className="placeholder:text-gray-500"
                 />
               </div>
-              <Button type="submit" className="w-full">Add Address</Button>
+              <Button type="button" onClick={handleSubmit} className="w-full">
+                Add Address
+              </Button>
             </form>
           </DialogContent>
         </Dialog>

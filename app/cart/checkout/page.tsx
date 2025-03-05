@@ -19,7 +19,7 @@ import {useMutation} from "@tanstack/react-query";
 import placeOrder from "@/app/utils/placeOrder";
 import Link from "next/link";
 import PrivateRoute from "@/app/components/PrivateRoute";
-import { IAddress } from "@/app/lib/models/user";
+import {IAddress} from "@/app/lib/models/user";
 
 export default function Checkout() {
   const router = useRouter();
@@ -51,7 +51,6 @@ export default function Checkout() {
     throw new Error("UserContext must be used within a user context");
   }
   const {user, checkoutItems, setCheckoutItems, defaultAddress} = userContext;
-
   const subtotal = useMemo(() => {
     return checkoutItems.reduce(
       (total, item) => total + item.product.price * item.total,

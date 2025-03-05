@@ -11,7 +11,7 @@ const NotLoggedInHeader = () => {
 
       <span className="flex items-center gap-2">
         <Link href={"/login"}>
-          <button className="bg-[#264653] font-semibold text-white h-full py-1 w-[6em] rounded-lg hover:bg-gray-950 transition-colors">
+          <button className="bg-primary font-semibold text-white h-full py-1 w-[6em] rounded-lg hover:bg-gray-950 transition-colors">
             Login
           </button>
         </Link>

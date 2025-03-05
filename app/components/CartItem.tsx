@@ -15,7 +15,7 @@ const CartItem = ({ item, selectedProducts, selectProduct, changeTotalItemCallba
             onClick={() => selectProduct(item)}
         >
             {selectedProducts.some((p) => p.product._id === item.product._id) && (
-                <div className="size-4 bg-gray-700 rounded-full" />
+                <div className="size-4 bg-primary rounded-full" />
             )}
         </div>
         <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-100 border flex items-center justify-center relative rounded-md overflow-hidden">

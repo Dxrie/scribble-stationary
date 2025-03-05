@@ -134,7 +134,7 @@ const Product = () => {
                                                 setSelectedProduct(product);
                                                 setQuantity(1);
                                             }}
-                                            className="bg-[#264653] text-white text-sm rounded-lg hover:bg-gray-950 transition-colors duration-150"
+                                            className="bg-primary text-white text-sm rounded-lg hover:bg-gray-950 transition-colors duration-150"
                                         >
                                             Add to cart
                                         </Button>
@@ -208,13 +208,13 @@ const Product = () => {
                                         setSelectedProduct(product);
                                         setQuantity(1);
                                     }}
-                                    className="bg-[#264653] text-white text-sm rounded-lg hover:bg-gray-950 transition-colors duration-150"
+                                    className="bg-primary text-white text-sm rounded-lg hover:bg-gray-950 transition-colors duration-150"
                                 >
                                     Add to cart
                                 </Button></Link>}
                                 <Link href={`/product/?id=${product._id}`}>
                                     <div
-                                        className="bg-[#264653] hover:bg-gray-950 p-2 rounded-full transition-colors duration-150">
+                                        className="bg-primary hover:bg-gray-950 p-2 rounded-full transition-colors duration-150">
                                         <ArrowUpRight className={"text-white"}/></div>
                                 </Link>
                             </div>

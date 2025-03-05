@@ -99,7 +99,7 @@ const ProductDisplayContent = () => {
                         <h1 className="text-xl uppercase tracking-tight font-semibold">{product?.name}</h1>
                         <div className="self-start"><Favorite className="text-3xl"/></div>
                     </div>
-                    <h1 className="block w-full px-2 py-2 rounded-lg font-normal bg-[#264653] text-white text-lg">Rp{formatToCurrency(product?.price)}</h1>
+                    <h1 className="block w-full px-2 py-2 rounded-lg font-normal bg-primary text-white text-lg">Rp{formatToCurrency(product?.price)}</h1>
                 </div>
                 {/* Scrollable Description Container */}
                 <div
