@@ -6,7 +6,7 @@ import Product from "./Product";
 const Recommendation = () => {
   return (
     <>
-      <div className="flex flex-col w-full font-poppins text-black gap-3 px-5">
+      <div className="flex flex-col w-full font-poppins text-black gap-3  px-5">
         <h1>Recommendations for you</h1>
 
         <Product />

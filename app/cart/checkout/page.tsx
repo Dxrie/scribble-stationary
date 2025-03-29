@@ -17,16 +17,16 @@ import {
   useRef,
   useState,
 } from "react";
-import {formatToCurrency, ICart, showSwal} from "@/app/lib/libs";
+import { formatToCurrency, ICart, showSwal } from "@/app/lib/libs";
 import Image from "next/image";
-import {Button} from "@/components/ui/button";
-import {UserContext} from "@/app/context/UserContext";
-import {useRouter} from "next/navigation";
-import {useMutation} from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { UserContext } from "@/app/context/UserContext";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
 import placeOrder from "@/app/utils/placeOrder";
 import Link from "next/link";
 import PrivateRoute from "@/app/components/PrivateRoute";
-import {IAddress} from "@/app/lib/models/user";
+import { IAddress } from "@/app/lib/models/user";
 import {
   Dialog,
   DialogContent,
@@ -36,8 +36,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {Input} from "@/components/ui/input";
-import {IVoucher} from "@/app/lib/models/voucher";
+import { Input } from "@/components/ui/input";
+import { IVoucher } from "@/app/lib/models/voucher";
 import API_KEY from "@/apiKey";
 
 export default function Checkout() {
@@ -103,11 +103,11 @@ export default function Checkout() {
   if (!userContext) {
     throw new Error("UserContext must be used within a user context");
   }
-  const {user, checkoutItems, setCheckoutItems, defaultAddress} = userContext;
+  const { user, checkoutItems, setCheckoutItems, defaultAddress } = userContext;
   const subtotal = useMemo(() => {
     return checkoutItems.reduce(
       (total, item) => total + item.product.price * item.total,
-      0
+      0,
     );
   }, [checkoutItems]);
 
@@ -126,7 +126,7 @@ export default function Checkout() {
       return;
     }
 
-    mutation.mutate({userId, products, proofOfPayment, address});
+    mutation.mutate({ userId, products, proofOfPayment, address });
   }, [checkoutItems, mutation, proofOfPayment, user?._id]);
 
   useEffect(() => {
@@ -209,7 +209,11 @@ export default function Checkout() {
                   <h1>Voucher</h1>
                   <div className="flex w-full items-center justify-between border rounded-lg py-4 gap-[5%] px-[5%]">
                     <div className="flex flex-col">
-                      <h1>{currentVoucher ? currentVoucher.voucherName : "No voucher selected"}</h1>
+                      <h1>
+                        {currentVoucher
+                          ? currentVoucher.voucherName
+                          : "No voucher selected"}
+                      </h1>
                     </div>
                     <Discount fontSize="large" className={"text-primary"} />
                   </div>
@@ -229,14 +233,35 @@ export default function Checkout() {
                   placeholder="XXXXXX"
                   className="placeholder:text-gray-400"
                 />
+                <Link
+                  className="text-center text-sm text-secondary underline"
+                  href={"/vouchers"}
+                >
+                  Look at vouchers list
+                </Link>
                 <DialogFooter>
-                  <Button
-                    onClick={() =>
-                      handleApplyVoucher(voucherRef.current?.value as string)
-                    }
-                  >
-                    Apply
-                  </Button>
+                  <div className="flex flex-col gap-1">
+                    <Button
+                      onClick={() =>
+                        handleApplyVoucher(voucherRef.current?.value as string)
+                      }
+                    >
+                      Apply
+                    </Button>
+                    {currentVoucher ? (
+                      <Button
+                        variant={"destructive"}
+                        onClick={() => {
+                          setCurrentVoucher(null);
+                          setIsVoucherDialogOpen(false);
+                        }}
+                      >
+                        Remove Voucher
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                  </div>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -249,7 +274,11 @@ export default function Checkout() {
                 </div>
                 <div className="flex justify-between w-full">
                   <h1>Voucher</h1>
-                  <h1>{currentVoucher ? `-IDR ${formatToCurrency(subtotal * (currentVoucher.discountPercentage / 100))}` : "-IDR 0"}</h1>
+                  <h1>
+                    {currentVoucher
+                      ? `-IDR ${formatToCurrency(subtotal * (currentVoucher.discountPercentage / 100))}`
+                      : "-IDR 0"}
+                  </h1>
                 </div>
                 <div className="flex justify-between w-full">
                   <h1>Delivery Charge</h1>
@@ -259,17 +288,31 @@ export default function Checkout() {
               <hr />
               <div className="flex justify-between w-full">
                 <h1>Total</h1>
-                <h1>IDR {formatToCurrency(subtotal - (subtotal * (currentVoucher ? currentVoucher.discountPercentage / 100 : 0)) + DELIVERY)}</h1>
+                <h1>
+                  IDR{" "}
+                  {formatToCurrency(
+                    subtotal -
+                      subtotal *
+                        (currentVoucher
+                          ? currentVoucher.discountPercentage / 100
+                          : 0) +
+                      DELIVERY,
+                  )}
+                </h1>
               </div>
             </div>
 
             <div className="flex flex-col w-full">
               <div className="flex w-full items-center justify-between border rounded-lg py-3 gap-[5%] px-[5%]">
                 <div className="flex items-center h-full gap-[10%]">
-                  <Wallet className="text-primary" fontSize="large" />
-                  <h1 className="font-semibold">Transfer</h1>
+                  <div className="flex flex-col">
+                    <h1 className="font-semibold text-lg">
+                      BCA Virtual Account
+                    </h1>
+                    <h3 className="font-normal text-sm">244201241241412</h3>
+                  </div>
                 </div>
-                <ArrowForwardIos className="text-primary" fontSize="medium" />
+                <Wallet className="text-primary" fontSize="large" />
               </div>
             </div>
 
