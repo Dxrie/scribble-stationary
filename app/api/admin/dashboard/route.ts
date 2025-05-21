@@ -1,4 +1,5 @@
 import connect from "@/app/lib/db";
+import { ICart } from "@/app/lib/libs";
 import CheckoutModel from "@/app/lib/models/checkout";
 import ProductModel from "@/app/lib/models/product";
 import UserModel from "@/app/lib/models/user";
@@ -14,12 +15,12 @@ export async function GET() {
     const checkoutTotal = checkouts
       .map((checkout) =>
         checkout.products
-          .map((item) => {
+          .map((item: ICart) => {
             const price = item.product?.price || 0;
             const quantity = item.total || 1;
             return price * quantity;
           })
-          .reduce((sum, val) => sum + val, 0),
+          .reduce((sum: number, val: number) => sum + val, 0),
       )
       .reduce((total, val) => total + val, 0);
 
