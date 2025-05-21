@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { encrypt, getBase64, showSwal, swalConfirm } from "../lib/libs";
+import { encrypt, getBase64, showSwal } from "../lib/libs";
 import { setCookie } from "cookies-next/client";
 import API_KEY from "@/apiKey";
 
@@ -33,7 +33,7 @@ const UserProfileComponent = () => {
     throw new Error("UserContext must be used within a user context");
   }
 
-  const { user, isLoadingUser, setUser } = userContext;
+  const { user, isLoadingUser, setUser, role } = userContext;
 
   useLayoutEffect(() => {
     if (!user?._id && !isLoadingUser) router.push("/");
@@ -96,12 +96,12 @@ const UserProfileComponent = () => {
 
       const data = await makeRequest(avatarData);
       await updateSession(data);
-    } catch (error) {
+    } catch (error: any) {
       showSwal(
         "Error",
         selectedFile
-          ? "Failed to update profile picture"
-          : "Failed to remove profile picture",
+          ? "Failed to update profile picture: " + error.message
+          : "Failed to remove profile picture: " + error.message,
         "error",
       );
     } finally {
@@ -193,9 +193,27 @@ const UserProfileComponent = () => {
       </div>
 
       <div className="w-full flex flex-col items-center gap-3">
+        {role === "Admin" ? (
+          <Link href={"/admin"} className="w-full">
+            <div className="w-full bg-primary text-primary-foreground drop-shadow-sm p-5 rounded-xl flex justify-between border">
+              <h1>Admin Panel</h1>
+              <ArrowForwardIos className="text-primary-foreground" />
+            </div>
+          </Link>
+        ) : (
+          ""
+        )}
+
         <Link href={"/user/address"} className="w-full">
           <div className="w-full bg-primary text-primary-foreground drop-shadow-sm p-5 rounded-xl flex justify-between border">
             <h1>Addresses</h1>
+            <ArrowForwardIos className="text-primary-foreground" />
+          </div>
+        </Link>
+
+        <Link href={"/cart"} className="w-full">
+          <div className="w-full bg-primary text-primary-foreground drop-shadow-sm p-5 rounded-xl flex justify-between border">
+            <h1>Carts</h1>
             <ArrowForwardIos className="text-primary-foreground" />
           </div>
         </Link>

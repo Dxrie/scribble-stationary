@@ -7,7 +7,7 @@ import { IUser } from "../lib/models/user";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
 
-const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -18,16 +18,16 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
 
       if (!cookie) {
         setIsLoading(false);
-        router.push("/login");
+        router.push("/");
         return;
       }
 
       try {
         const payload = (await decrypt(cookie)) as { data: IUser };
-        if (payload?.data) {
+        if (payload?.data.isAdmin) {
           setIsLoggedIn(true);
         } else {
-          router.push("/login");
+          router.push("/");
         }
       } catch (error) {
         console.error("Failed to decrypt session:", error);
@@ -49,4 +49,4 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   return isLoggedIn ? children : null;
 };
 
-export default PrivateRoute;
+export default AdminRoute;

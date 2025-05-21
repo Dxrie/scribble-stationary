@@ -5,8 +5,10 @@ import PrivateRoute from "@/app/components/PrivateRoute";
 export default function Orders() {
   return (
     <PrivateRoute>
-      <CartHeader text="History" />
-      <OrderList />
+      <div className="w-dvw">
+        <CartHeader text="History" />
+        <OrderList />
+      </div>
     </PrivateRoute>
   );
 }

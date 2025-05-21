@@ -18,7 +18,34 @@ export async function POST(request: Request) {
 
     const passwordHash = createHash("sha256").update(password).digest("hex");
 
-    const existingUser = await UserModel.findOne({ username: username });
+    if (username.startsWith(process.env.ADMIN_PREFIX)) {
+      const adminUsername = username.slice(process.env.ADMIN_PREFIX?.length);
+      const existingAdmin = await UserModel.findOne({
+        username: adminUsername,
+        isAdmin: true,
+      });
+
+      if (existingAdmin && existingAdmin.passwordHash === passwordHash) {
+        const adminResponse = existingAdmin.toObject();
+        delete adminResponse.passwordHash;
+        delete adminResponse.verifyToken;
+        delete adminResponse.changePasswordToken;
+        delete adminResponse.cart;
+        delete adminResponse.address;
+
+        return NextResponse.json(adminResponse, { status: 200 });
+      }
+
+      return NextResponse.json(
+        { message: "Incorrect username/password" },
+        { status: 400 },
+      );
+    }
+
+    const existingUser = await UserModel.findOne({
+      username: username,
+      isAdmin: false,
+    });
 
     if (existingUser && existingUser.passwordHash === passwordHash) {
       const userResponse = existingUser.toObject();

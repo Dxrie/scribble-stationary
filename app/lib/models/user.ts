@@ -74,6 +74,7 @@ export interface IUser {
   updatedAt: Date;
   address: [IAddress];
   avatar: string | undefined;
+  isAdmin: boolean;
 }
 
 const UserSchema = new Schema(
@@ -95,6 +96,10 @@ const UserSchema = new Schema(
     passwordHash: {
       type: String,
       required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
     isVerified: {
       type: Boolean,

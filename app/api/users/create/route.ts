@@ -19,6 +19,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (username.toLowerCase().startsWith("scribbleadmin_")) {
+      return NextResponse.json(
+        { message: "Username already exists" },
+        { status: 400 },
+      );
+    }
+
     await connect();
 
     const existingUser = await UserModel.findOne({

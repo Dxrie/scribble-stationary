@@ -5,7 +5,7 @@ import PrivateRoute from "@/app/components/PrivateRoute";
 export default function Address() {
   return (
     <PrivateRoute>
-      <div className="bg-background w-full h-dvh">
+      <div className="bg-background w-dvw h-dvh">
         <CartHeader text="Addresses" />
         <AddressList />
       </div>

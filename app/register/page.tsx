@@ -1,5 +1,4 @@
 "use client";
-import { createHash } from "crypto";
 import Link from "next/link";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { showSwal } from "../lib/libs";
@@ -95,7 +94,7 @@ export default function Register() {
 
   return (
     <Transition>
-      <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-primary">
+      <div className="w-dvw h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-primary">
         <span className="flex justify-center items-center gap-3">
           <img
             alt="logo"

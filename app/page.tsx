@@ -7,7 +7,7 @@ import Transition from "./components/Transition";
 export default function Home() {
   return (
     <Transition>
-      <div className="bg-background w-full h-[100vh] font-poppins">
+      <div className="bg-background w-dvw h-[100vh] font-poppins">
         <Header />
         <Categories />
         <Recommendation />

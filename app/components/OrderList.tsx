@@ -73,7 +73,7 @@ export default function OrderList() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="w-full container mx-auto px-4 py-8">
       {orders.length === 0 ? (
         <p className="text-gray-500">You have no orders yet.</p>
       ) : (

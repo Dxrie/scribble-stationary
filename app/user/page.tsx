@@ -8,7 +8,7 @@ export default function UserPage() {
   return (
     <PrivateRoute>
       <Transition>
-        <div className="w-full h-dvh font-poppins bg-background">
+        <div className="w-dvw h-dvh font-poppins bg-background">
           <UserHeader />
           <UserProfileComponent />
           <Navbar currentIndex={3} />

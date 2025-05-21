@@ -15,7 +15,7 @@ export default function UserHeader() {
     throw new Error("UserContext must be used within a user context");
   }
 
-  const { setUser } = userContext;
+  const { logout } = userContext;
 
   const handleLogout = async () => {
     const response = await swalConfirm(
@@ -26,11 +26,7 @@ export default function UserHeader() {
     );
 
     if (response.isConfirmed) {
-      setCookie("session", "", {
-        expires: new Date(0),
-        path: "/",
-      });
-      setUser(undefined);
+      logout();
       router.push("/");
     }
   };

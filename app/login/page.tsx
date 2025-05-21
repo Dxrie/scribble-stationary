@@ -1,8 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { encrypt, showSwal, swalConfirm } from "../lib/libs";
-import { setCookie } from "cookies-next/client";
+import { showSwal, swalConfirm } from "../lib/libs";
 import { useRouter } from "next/navigation";
 import Transition from "../components/Transition";
 import API_KEY from "@/apiKey";
@@ -16,7 +15,7 @@ export default function Login() {
     throw new Error("UserContext must be used within a user context");
   }
 
-  const { user, setUser } = userContext;
+  const { user, setUser, login } = userContext;
 
   useEffect(() => {
     if (user) {
@@ -30,7 +29,7 @@ export default function Login() {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  const login = useCallback(async () => {
+  const loginCallback = useCallback(async () => {
     if (isLoading) return;
 
     if (typeof formData.password === "string") {
@@ -53,23 +52,6 @@ export default function Login() {
 
           if (response.ok) {
             const data = await response.json();
-            const expires = new Date(Date.now() + 60 * 60 * 1000 * 24);
-
-            if (data.isAdmin) {
-              console.log("Admin user logged in");
-
-              const adminSession = await encrypt({ data, expires });
-
-              setCookie("session", adminSession, {
-                expires,
-                path: "/",
-                sameSite: "lax",
-              });
-              setUser(data);
-
-              router.push("/admin/dashboard");
-              return;
-            }
 
             if (
               !data.isVerified &&
@@ -121,14 +103,7 @@ export default function Login() {
               }
             }
 
-            const session = await encrypt({ data, expires });
-
-            setCookie("session", session, {
-              expires,
-              path: "/",
-              sameSite: "lax",
-            });
-            setUser(data);
+            login(data);
           } else {
             const errorData = await response.json();
             showSwal("Error", errorData.message, "error");
@@ -151,7 +126,7 @@ export default function Login() {
 
   return (
     <Transition>
-      <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-primary">
+      <div className="w-dvw h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-primary">
         <span className="flex justify-center items-center gap-3">
           <img
             alt="logo"
@@ -190,7 +165,7 @@ export default function Login() {
             required
           />
           <button
-            onClick={login}
+            onClick={loginCallback}
             type="button"
             className="hover:bg-slate-900 w-[90%] py-3 px-3 rounded-3xl border-black border-1 drop-shadow-xl focus:outline-none text-white bg-black font-semibold cursor-pointer"
             disabled={isLoading}

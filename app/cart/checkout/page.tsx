@@ -137,7 +137,7 @@ export default function Checkout() {
 
   return (
     <PrivateRoute>
-      <div className="w-full h-dvh bg-background relative">
+      <div className="w-dvw h-dvh bg-background relative">
         <CartHeader text={"Checkout"} />
         <div className="w-full flex flex-col items-center bg-transparent relative gap-4 pb-4">
           <Link href={"/user/address"} className="w-[90%]">
@@ -316,7 +316,7 @@ export default function Checkout() {
               </div>
             </div>
 
-            <UploadForm setProofOfPayment={setProofOfPayment} />
+            <UploadForm setImage={setProofOfPayment} />
 
             <Button onClick={placeOrderCallback}>Place Order</Button>
           </div>

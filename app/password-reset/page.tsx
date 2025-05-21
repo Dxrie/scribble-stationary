@@ -165,7 +165,7 @@ function PasswordResetContent() {
     if (validToken && isLoading === false) {
       return (
         <Transition>
-          <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-primary">
+          <div className="w-dvw h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-primary">
             <span className="flex justify-center items-center gap-3">
               <img
                 alt="logo"
@@ -234,7 +234,7 @@ function PasswordResetContent() {
   } else {
     return (
       <Transition>
-        <div className="w-full h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-primary">
+        <div className="w-dvw h-[100dvh] font-poppins flex flex-col justify-center gap-5 bg-primary">
           <span className="flex justify-center items-center gap-3">
             <img
               alt="logo"

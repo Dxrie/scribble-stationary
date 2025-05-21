@@ -5,6 +5,8 @@ import ReactQueryProvider from "@/app/utils/ReactQueryProvider";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { UserContextProvider } from "@/app/context/UserContext";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/ui/app-sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,9 +54,12 @@ export default function RootLayout({
       >
         <UserContextProvider>
           <ReactQueryProvider>
-            <main>{children}</main>
-            <Analytics />
-            <SpeedInsights />
+            <SidebarProvider>
+              <AppSidebar />
+              <main>{children}</main>
+              <Analytics />
+              <SpeedInsights />
+            </SidebarProvider>
           </ReactQueryProvider>
         </UserContextProvider>
       </body>

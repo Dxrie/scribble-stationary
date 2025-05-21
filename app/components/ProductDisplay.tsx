@@ -87,7 +87,7 @@ const ProductDisplayContent = () => {
   return (
     <>
       <ProductNavbar />
-      <div className="flex w-full h-full flex-col relative bg-background">
+      <div className="flex w-dvw h-full flex-col relative bg-background">
         {" "}
         {/* Add padding-bottom to prevent content from being hidden behind the fixed button */}
         <div

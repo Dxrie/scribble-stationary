@@ -5,7 +5,7 @@ import VoucherList from "../components/VoucherList";
 
 export default function Page() {
   return (
-    <div className="w-full h-dvh font-poppins bg-background">
+    <div className="w-dvw h-dvh font-poppins bg-background">
       <PrivateRoute>
         <CartHeader text="Vouchers" />
         <VoucherList />
